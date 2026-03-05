@@ -8,12 +8,28 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 @SessionScope
 public class CarritoCompraService {
 
+    private static final Logger log = LoggerFactory.getLogger(CarritoCompraService.class);
+
     private List<ItemCarrito> items = new ArrayList<>();
+
+    @PostConstruct
+    public void onInit() {
+        log.info("*** CARRITO CREADO: Bean instanciado temporalmente en memoria para este usuario ***");
+    }
+
+    @PreDestroy
+    public void onDestroy() {
+        log.info("*** CARRITO DESTRUIDO: Memoria liberada. El usuario {} perdio su sesion. ***", this.hashCode());
+    }
 
     public void agregarProducto(Producto producto, int cantidad) {
         Optional<ItemCarrito> itemExistente = items.stream()

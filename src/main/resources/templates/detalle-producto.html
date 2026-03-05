@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle del Producto</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Mi Tienda QTX</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/carrito">Carrito</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row" th:if="${producto != null}">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0" th:text="${producto.nombre}">Nombre Producto</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="text-success mb-3" th:text="${'$' + producto.precio}">$0.00</h4>
+                    <p class="card-text" th:text="${producto.descripcion}">Descripción detallada del producto.</p>
+                    
+                    <hr>
+                    
+                    <form th:action="@{/carrito/agregar}" method="post" class="mt-4">
+                        <input type="hidden" name="productoId" th:value="${producto.id}" />
+                        
+                        <div class="mb-3">
+                            <label for="cantidad" class="form-label">Cantidad a comprar:</label>
+                            <input type="number" class="form-control" id="cantidad" name="cantidad" value="1" min="1" max="99" required>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                Agregar al Carrito
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <a th:href="@{/categorias/{id}(id=${producto.categoria.id})}" class="btn btn-outline-secondary">Volver a la Categoría</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="alert alert-danger" th:if="${producto == null}">
+        El producto solicitado no existe.
+    </div>
+</div>
+
+<!-- Bootstrap JS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

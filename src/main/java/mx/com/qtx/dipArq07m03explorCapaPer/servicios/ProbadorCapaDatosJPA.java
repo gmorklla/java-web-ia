@@ -4,11 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
-
 import mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa.Categoria;
 
-@Component
+// @Component
 public class ProbadorCapaDatosJPA implements CommandLineRunner{
 	private static Logger log = LoggerFactory.getLogger(ProbadorCapaDatosJPA.class);
 	

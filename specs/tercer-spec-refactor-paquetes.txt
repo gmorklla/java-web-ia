@@ -1,0 +1,51 @@
+1. Diagnóstico Arquitectónico: Crítica de la Estructura Actual
+
+A. Inconsistente en la Capa de Persistencia:
+El sistema presenta una mezcla de tres estilos distintos: JDBC puro (GestorVentasDAO), JPA Manual (GestorVentasJPAmanual) y Spring Data JPA (CategoriaRepository). Esta coexistencia fragmenta la gestión transaccional, dificulta el mantenimiento y aumenta el riesgo de comportamientos inesperados en la sincronización de datos.
+
+B. Paquetización por tecnología vs. Dominio:
+La organización actual agrupa las clases por su rol técnico (web, persistencia, servicio). Aunque funciona para prototipos, en sistemas escalables genera un acoplamiento disperso: para modificar una sola regla de negocio (ej. el Carrito), el desarrollador debe intervenir múltiples paquetes, lo que dificulta la trazabilidad y la modularización.
+
+2. Propuesta: Transición a Arquitectura de Capas Limpias
+
+El objetivo es reorganizar el proyecto para proteger la Lógica de Negocio de los cambios en las herramientas externas (Frameworks, Bases de Datos, UI).
+
+Nueva Estructura de Paquetes:
+
+mx.com.qtx.dipArq07m03explorCapaPer/
+├── core/              <-- EL CORAZÓN: Independiente de la tecnología
+│   ├── model/         <-- Entidades de Negocio puras (Producto, Categoria)
+│   └── service/       <-- Casos de Uso / Reglas de Negocio (CarritoCompraService)
+├── api/               <-- LA ENTRADA: Protocolos de comunicación
+│   ├── controller/    <-- Controladores Web (Thymeleaf / REST)
+│   └── dto/           <-- Objetos de transferencia (Data Transfer Objects)
+├── infrastructure/    <-- EL DETALLE: Implementaciones técnicas
+│   ├── persistence/   <-- Repositorios JPA y DAOs Legacy
+│   ├── monitoring/    <-- Instrumentación (Filtros, Logs, Auditoría)
+│   └── config/        <-- Configuración del Framework (Spring)
+└── Application.java
+
+
+El código en el paquete core es el más importante: no puede importar nada de api o infrastructure. Las capas externas dependen de las internas, pero nunca al revés.
+
+3. Justificación Técnica del Cambio
+
+A. Estabilidad vs. Volatilidad (Protección del Negocio)
+
+Capas Volátiles (api e infrastructure): Son las que más cambian. Hoy usamos Thymeleaf y MySQL; mañana podríamos usar React y MongoDB.
+
+Capa Estable (core): Las reglas de negocio (ej. cómo se calcula un total) son constantes.
+
+Justificación: Al aislar el core, evitamos el "efecto dominó": que un cambio en la base de datos o en la versión de un log obligue a modificar y volver a testear la lógica de ventas.
+
+B. Independencia del Framework (Portabilidad y Longevidad)
+
+Contexto: Actualmente usamos Spring Boot, pero las arquitecturas pueden migrar (ej. Serverless) con el menor impacto posible.
+
+Justificación: Al mantener el core como Java Puro, el conocimiento del negocio se vuelve portátil. El negocio deja de depender del framework y se convierte en un activo de software que puede a través del tiempo.
+
+4. Plan de Acción Inmediato
+
+Saneamiento de Persistencia: Unificar criterios moviendo Entidades a core.model y Repositorios a infrastructure.persistence, eliminando la ambigüedad.
+
+Profesionalización del Testing: Sustituir los "Probadores" por Tests Unitarios e Integrales en src/test/java. Esto limpia el log de arranque y garantiza que el sistema funcione automáticamente tras cada cambio.

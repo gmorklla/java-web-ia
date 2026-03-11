@@ -1,0 +1,40 @@
+classDiagram
+    direction RL
+    
+    namespace CORE_EL_CORAZON {
+        class core_model["core.model (Entidades)"]
+        class core_service["core.service (Casos de Uso)"]
+    }
+
+    namespace API_LA_ENTRADA {
+        class api_controller["api.controller (Controladores)"]
+        class api_dto["api.dto (Transferencia)"]
+    }
+
+    namespace INFRASTRUCTURE_EL_DETALLE {
+        class infra_persistence["infrastructure.persistence (Repositorios)"]
+        class infra_monitoring["infrastructure.monitoring (Filtros/Logs)"]
+        class infra_config["infrastructure.config (Spring Config)"]
+    }
+
+    %% Dependencias de la Capa API
+    api_controller --> core_service : Usa servicios para lógica
+    api_controller --> api_dto : Retorna/Recibe
+    api_dto ..> core_model : Mapea datos desde
+
+    %% Dependencias de la Capa Core (Hacia adentro)
+    core_service --> core_model : Manipula entidades
+
+    %% Dependencias de la Capa Infrastructure
+    infra_persistence --|> core_service : Implementa Interfaces (Inversión)
+    infra_persistence --> core_model : Guarda/Lee entidades
+    infra_config --> api_controller : Instancia (Spring)
+    infra_config --> core_service : Instancia (Spring)
+    
+    %% Relación específica de Monitoring
+    infra_monitoring ..> api_controller : Intercepta peticiones HTTP
+    infra_monitoring ..> core_service : Audita ejecuciones (AOP)
+
+    style CORE_EL_CORAZON fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style API_LA_ENTRADA fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style INFRASTRUCTURE_EL_DETALLE fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px

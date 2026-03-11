@@ -1,0 +1,2704 @@
+Directory structure:
+└── gmorklla-java-web-ia/
+    ├── mvnw
+    ├── mvnw.cmd
+    ├── pom.xml
+    ├── specs/
+    │   ├── critica-arquitectonica.md
+    │   ├── primer-spec.md
+    │   ├── segundo-spec.md
+    │   └── why-session-as-service.md
+    ├── src/
+    │   ├── main/
+    │   │   ├── java/
+    │   │   │   └── mx/
+    │   │   │       └── com/
+    │   │   │           └── qtx/
+    │   │   │               └── dipArq07m03explorCapaPer/
+    │   │   │                   ├── DipArq07m03explorCapaPer1Application.java
+    │   │   │                   ├── monitoring/
+    │   │   │                   │   ├── ConcurrencyTrackingFilter.java
+    │   │   │                   │   └── SessionMonitoringListener.java
+    │   │   │                   ├── negocio/
+    │   │   │                   │   ├── CarritoCompraService.java
+    │   │   │                   │   └── ItemCarrito.java
+    │   │   │                   ├── persistencia/
+    │   │   │                   │   ├── dao/
+    │   │   │                   │   │   └── GestorVentasDAO.java
+    │   │   │                   │   └── jpa/
+    │   │   │                   │       ├── Categoria.java
+    │   │   │                   │       ├── CategoriaRepository.java
+    │   │   │                   │       ├── Cliente.java
+    │   │   │                   │       ├── DetallePedido.java
+    │   │   │                   │       ├── DetalleVenta.java
+    │   │   │                   │       ├── Empleado.java
+    │   │   │                   │       ├── GestorVentasJPAmanual.java
+    │   │   │                   │       ├── InventarioProducto.java
+    │   │   │                   │       ├── Pedido.java
+    │   │   │                   │       ├── Producto.java
+    │   │   │                   │       ├── ProductoRepository.java
+    │   │   │                   │       ├── Proveedor.java
+    │   │   │                   │       ├── ProveedorPrimarioProd.java
+    │   │   │                   │       ├── ProveedorPrimarioProdId.java
+    │   │   │                   │       ├── Rol.java
+    │   │   │                   │       ├── Tienda.java
+    │   │   │                   │       ├── TipoEmpleado.java
+    │   │   │                   │       └── Venta.java
+    │   │   │                   ├── servicios/
+    │   │   │                   │   ├── IGestorDatos.java
+    │   │   │                   │   ├── IGestorDatosAltoNivel.java
+    │   │   │                   │   ├── ProbadorCapaDatos.java
+    │   │   │                   │   ├── ProbadorCapaDatosJPA.java
+    │   │   │                   │   └── dto/
+    │   │   │                   │       ├── CategoriaDTO.java
+    │   │   │                   │       └── CategoriaProductoDTO.java
+    │   │   │                   └── web/
+    │   │   │                       ├── CarritoController.java
+    │   │   │                       └── CatalogoController.java
+    │   │   └── resources/
+    │   │       ├── application.properties
+    │   │       └── templates/
+    │   │           ├── carrito.html
+    │   │           ├── categorias.html
+    │   │           ├── detalle-producto.html
+    │   │           └── productos-por-categoria.html
+    │   └── test/
+    │       └── java/
+    │           └── mx/
+    │               └── com/
+    │                   └── qtx/
+    │                       └── dipArq07m03explorCapaPer/
+    │                           └── DipArq07m03explorCapaPer1ApplicationTests.java
+    └── .mvn/
+        └── wrapper/
+            └── maven-wrapper.properties
+
+================================================
+FILE: mvnw
+================================================
+#!/bin/sh
+# ----------------------------------------------------------------------------
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+# ----------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------
+# Apache Maven Wrapper startup batch script, version 3.3.4
+#
+# Optional ENV vars
+# -----------------
+#   JAVA_HOME - location of a JDK home dir, required when download maven via java source
+#   MVNW_REPOURL - repo url base for downloading maven distribution
+#   MVNW_USERNAME/MVNW_PASSWORD - user and password for downloading maven
+#   MVNW_VERBOSE - true: enable verbose log; debug: trace the mvnw script; others: silence the output
+# ----------------------------------------------------------------------------
+
+set -euf
+[ "${MVNW_VERBOSE-}" != debug ] || set -x
+
+# OS specific support.
+native_path() { printf %s\\n "$1"; }
+case "$(uname)" in
+CYGWIN* | MINGW*)
+  [ -z "${JAVA_HOME-}" ] || JAVA_HOME="$(cygpath --unix "$JAVA_HOME")"
+  native_path() { cygpath --path --windows "$1"; }
+  ;;
+esac
+
+# set JAVACMD and JAVACCMD
+set_java_home() {
+  # For Cygwin and MinGW, ensure paths are in Unix format before anything is touched
+  if [ -n "${JAVA_HOME-}" ]; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ]; then
+      # IBM's JDK on AIX uses strange locations for the executables
+      JAVACMD="$JAVA_HOME/jre/sh/java"
+      JAVACCMD="$JAVA_HOME/jre/sh/javac"
+    else
+      JAVACMD="$JAVA_HOME/bin/java"
+      JAVACCMD="$JAVA_HOME/bin/javac"
+
+      if [ ! -x "$JAVACMD" ] || [ ! -x "$JAVACCMD" ]; then
+        echo "The JAVA_HOME environment variable is not defined correctly, so mvnw cannot run." >&2
+        echo "JAVA_HOME is set to \"$JAVA_HOME\", but \"\$JAVA_HOME/bin/java\" or \"\$JAVA_HOME/bin/javac\" does not exist." >&2
+        return 1
+      fi
+    fi
+  else
+    JAVACMD="$(
+      'set' +e
+      'unset' -f command 2>/dev/null
+      'command' -v java
+    )" || :
+    JAVACCMD="$(
+      'set' +e
+      'unset' -f command 2>/dev/null
+      'command' -v javac
+    )" || :
+
+    if [ ! -x "${JAVACMD-}" ] || [ ! -x "${JAVACCMD-}" ]; then
+      echo "The java/javac command does not exist in PATH nor is JAVA_HOME set, so mvnw cannot run." >&2
+      return 1
+    fi
+  fi
+}
+
+# hash string like Java String::hashCode
+hash_string() {
+  str="${1:-}" h=0
+  while [ -n "$str" ]; do
+    char="${str%"${str#?}"}"
+    h=$(((h * 31 + $(LC_CTYPE=C printf %d "'$char")) % 4294967296))
+    str="${str#?}"
+  done
+  printf %x\\n $h
+}
+
+verbose() { :; }
+[ "${MVNW_VERBOSE-}" != true ] || verbose() { printf %s\\n "${1-}"; }
+
+die() {
+  printf %s\\n "$1" >&2
+  exit 1
+}
+
+trim() {
+  # MWRAPPER-139:
+  #   Trims trailing and leading whitespace, carriage returns, tabs, and linefeeds.
+  #   Needed for removing poorly interpreted newline sequences when running in more
+  #   exotic environments such as mingw bash on Windows.
+  printf "%s" "${1}" | tr -d '[:space:]'
+}
+
+scriptDir="$(dirname "$0")"
+scriptName="$(basename "$0")"
+
+# parse distributionUrl and optional distributionSha256Sum, requires .mvn/wrapper/maven-wrapper.properties
+while IFS="=" read -r key value; do
+  case "${key-}" in
+  distributionUrl) distributionUrl=$(trim "${value-}") ;;
+  distributionSha256Sum) distributionSha256Sum=$(trim "${value-}") ;;
+  esac
+done <"$scriptDir/.mvn/wrapper/maven-wrapper.properties"
+[ -n "${distributionUrl-}" ] || die "cannot read distributionUrl property in $scriptDir/.mvn/wrapper/maven-wrapper.properties"
+
+case "${distributionUrl##*/}" in
+maven-mvnd-*bin.*)
+  MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/
+  case "${PROCESSOR_ARCHITECTURE-}${PROCESSOR_ARCHITEW6432-}:$(uname -a)" in
+  *AMD64:CYGWIN* | *AMD64:MINGW*) distributionPlatform=windows-amd64 ;;
+  :Darwin*x86_64) distributionPlatform=darwin-amd64 ;;
+  :Darwin*arm64) distributionPlatform=darwin-aarch64 ;;
+  :Linux*x86_64*) distributionPlatform=linux-amd64 ;;
+  *)
+    echo "Cannot detect native platform for mvnd on $(uname)-$(uname -m), use pure java version" >&2
+    distributionPlatform=linux-amd64
+    ;;
+  esac
+  distributionUrl="${distributionUrl%-bin.*}-$distributionPlatform.zip"
+  ;;
+maven-mvnd-*) MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/ ;;
+*) MVN_CMD="mvn${scriptName#mvnw}" _MVNW_REPO_PATTERN=/org/apache/maven/ ;;
+esac
+
+# apply MVNW_REPOURL and calculate MAVEN_HOME
+# maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
+[ -z "${MVNW_REPOURL-}" ] || distributionUrl="$MVNW_REPOURL$_MVNW_REPO_PATTERN${distributionUrl#*"$_MVNW_REPO_PATTERN"}"
+distributionUrlName="${distributionUrl##*/}"
+distributionUrlNameMain="${distributionUrlName%.*}"
+distributionUrlNameMain="${distributionUrlNameMain%-bin}"
+MAVEN_USER_HOME="${MAVEN_USER_HOME:-${HOME}/.m2}"
+MAVEN_HOME="${MAVEN_USER_HOME}/wrapper/dists/${distributionUrlNameMain-}/$(hash_string "$distributionUrl")"
+
+exec_maven() {
+  unset MVNW_VERBOSE MVNW_USERNAME MVNW_PASSWORD MVNW_REPOURL || :
+  exec "$MAVEN_HOME/bin/$MVN_CMD" "$@" || die "cannot exec $MAVEN_HOME/bin/$MVN_CMD"
+}
+
+if [ -d "$MAVEN_HOME" ]; then
+  verbose "found existing MAVEN_HOME at $MAVEN_HOME"
+  exec_maven "$@"
+fi
+
+case "${distributionUrl-}" in
+*?-bin.zip | *?maven-mvnd-?*-?*.zip) ;;
+*) die "distributionUrl is not valid, must match *-bin.zip or maven-mvnd-*.zip, but found '${distributionUrl-}'" ;;
+esac
+
+# prepare tmp dir
+if TMP_DOWNLOAD_DIR="$(mktemp -d)" && [ -d "$TMP_DOWNLOAD_DIR" ]; then
+  clean() { rm -rf -- "$TMP_DOWNLOAD_DIR"; }
+  trap clean HUP INT TERM EXIT
+else
+  die "cannot create temp dir"
+fi
+
+mkdir -p -- "${MAVEN_HOME%/*}"
+
+# Download and Install Apache Maven
+verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
+verbose "Downloading from: $distributionUrl"
+verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
+
+# select .zip or .tar.gz
+if ! command -v unzip >/dev/null; then
+  distributionUrl="${distributionUrl%.zip}.tar.gz"
+  distributionUrlName="${distributionUrl##*/}"
+fi
+
+# verbose opt
+__MVNW_QUIET_WGET=--quiet __MVNW_QUIET_CURL=--silent __MVNW_QUIET_UNZIP=-q __MVNW_QUIET_TAR=''
+[ "${MVNW_VERBOSE-}" != true ] || __MVNW_QUIET_WGET='' __MVNW_QUIET_CURL='' __MVNW_QUIET_UNZIP='' __MVNW_QUIET_TAR=v
+
+# normalize http auth
+case "${MVNW_PASSWORD:+has-password}" in
+'') MVNW_USERNAME='' MVNW_PASSWORD='' ;;
+has-password) [ -n "${MVNW_USERNAME-}" ] || MVNW_USERNAME='' MVNW_PASSWORD='' ;;
+esac
+
+if [ -z "${MVNW_USERNAME-}" ] && command -v wget >/dev/null; then
+  verbose "Found wget ... using wget"
+  wget ${__MVNW_QUIET_WGET:+"$__MVNW_QUIET_WGET"} "$distributionUrl" -O "$TMP_DOWNLOAD_DIR/$distributionUrlName" || die "wget: Failed to fetch $distributionUrl"
+elif [ -z "${MVNW_USERNAME-}" ] && command -v curl >/dev/null; then
+  verbose "Found curl ... using curl"
+  curl ${__MVNW_QUIET_CURL:+"$__MVNW_QUIET_CURL"} -f -L -o "$TMP_DOWNLOAD_DIR/$distributionUrlName" "$distributionUrl" || die "curl: Failed to fetch $distributionUrl"
+elif set_java_home; then
+  verbose "Falling back to use Java to download"
+  javaSource="$TMP_DOWNLOAD_DIR/Downloader.java"
+  targetZip="$TMP_DOWNLOAD_DIR/$distributionUrlName"
+  cat >"$javaSource" <<-END
+	public class Downloader extends java.net.Authenticator
+	{
+	  protected java.net.PasswordAuthentication getPasswordAuthentication()
+	  {
+	    return new java.net.PasswordAuthentication( System.getenv( "MVNW_USERNAME" ), System.getenv( "MVNW_PASSWORD" ).toCharArray() );
+	  }
+	  public static void main( String[] args ) throws Exception
+	  {
+	    setDefault( new Downloader() );
+	    java.nio.file.Files.copy( java.net.URI.create( args[0] ).toURL().openStream(), java.nio.file.Paths.get( args[1] ).toAbsolutePath().normalize() );
+	  }
+	}
+	END
+  # For Cygwin/MinGW, switch paths to Windows format before running javac and java
+  verbose " - Compiling Downloader.java ..."
+  "$(native_path "$JAVACCMD")" "$(native_path "$javaSource")" || die "Failed to compile Downloader.java"
+  verbose " - Running Downloader.java ..."
+  "$(native_path "$JAVACMD")" -cp "$(native_path "$TMP_DOWNLOAD_DIR")" Downloader "$distributionUrl" "$(native_path "$targetZip")"
+fi
+
+# If specified, validate the SHA-256 sum of the Maven distribution zip file
+if [ -n "${distributionSha256Sum-}" ]; then
+  distributionSha256Result=false
+  if [ "$MVN_CMD" = mvnd.sh ]; then
+    echo "Checksum validation is not supported for maven-mvnd." >&2
+    echo "Please disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
+    exit 1
+  elif command -v sha256sum >/dev/null; then
+    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrlName" | sha256sum -c - >/dev/null 2>&1; then
+      distributionSha256Result=true
+    fi
+  elif command -v shasum >/dev/null; then
+    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrlName" | shasum -a 256 -c >/dev/null 2>&1; then
+      distributionSha256Result=true
+    fi
+  else
+    echo "Checksum validation was requested but neither 'sha256sum' or 'shasum' are available." >&2
+    echo "Please install either command, or disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
+    exit 1
+  fi
+  if [ $distributionSha256Result = false ]; then
+    echo "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised." >&2
+    echo "If you updated your Maven version, you need to update the specified distributionSha256Sum property." >&2
+    exit 1
+  fi
+fi
+
+# unzip and move
+if command -v unzip >/dev/null; then
+  unzip ${__MVNW_QUIET_UNZIP:+"$__MVNW_QUIET_UNZIP"} "$TMP_DOWNLOAD_DIR/$distributionUrlName" -d "$TMP_DOWNLOAD_DIR" || die "failed to unzip"
+else
+  tar xzf${__MVNW_QUIET_TAR:+"$__MVNW_QUIET_TAR"} "$TMP_DOWNLOAD_DIR/$distributionUrlName" -C "$TMP_DOWNLOAD_DIR" || die "failed to untar"
+fi
+
+# Find the actual extracted directory name (handles snapshots where filename != directory name)
+actualDistributionDir=""
+
+# First try the expected directory name (for regular distributions)
+if [ -d "$TMP_DOWNLOAD_DIR/$distributionUrlNameMain" ]; then
+  if [ -f "$TMP_DOWNLOAD_DIR/$distributionUrlNameMain/bin/$MVN_CMD" ]; then
+    actualDistributionDir="$distributionUrlNameMain"
+  fi
+fi
+
+# If not found, search for any directory with the Maven executable (for snapshots)
+if [ -z "$actualDistributionDir" ]; then
+  # enable globbing to iterate over items
+  set +f
+  for dir in "$TMP_DOWNLOAD_DIR"/*; do
+    if [ -d "$dir" ]; then
+      if [ -f "$dir/bin/$MVN_CMD" ]; then
+        actualDistributionDir="$(basename "$dir")"
+        break
+      fi
+    fi
+  done
+  set -f
+fi
+
+if [ -z "$actualDistributionDir" ]; then
+  verbose "Contents of $TMP_DOWNLOAD_DIR:"
+  verbose "$(ls -la "$TMP_DOWNLOAD_DIR")"
+  die "Could not find Maven distribution directory in extracted archive"
+fi
+
+verbose "Found extracted Maven distribution directory: $actualDistributionDir"
+printf %s\\n "$distributionUrl" >"$TMP_DOWNLOAD_DIR/$actualDistributionDir/mvnw.url"
+mv -- "$TMP_DOWNLOAD_DIR/$actualDistributionDir" "$MAVEN_HOME" || [ -d "$MAVEN_HOME" ] || die "fail to move MAVEN_HOME"
+
+clean || :
+exec_maven "$@"
+
+
+
+================================================
+FILE: mvnw.cmd
+================================================
+<# : batch portion
+@REM ----------------------------------------------------------------------------
+@REM Licensed to the Apache Software Foundation (ASF) under one
+@REM or more contributor license agreements.  See the NOTICE file
+@REM distributed with this work for additional information
+@REM regarding copyright ownership.  The ASF licenses this file
+@REM to you under the Apache License, Version 2.0 (the
+@REM "License"); you may not use this file except in compliance
+@REM with the License.  You may obtain a copy of the License at
+@REM
+@REM    http://www.apache.org/licenses/LICENSE-2.0
+@REM
+@REM Unless required by applicable law or agreed to in writing,
+@REM software distributed under the License is distributed on an
+@REM "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+@REM KIND, either express or implied.  See the License for the
+@REM specific language governing permissions and limitations
+@REM under the License.
+@REM ----------------------------------------------------------------------------
+
+@REM ----------------------------------------------------------------------------
+@REM Apache Maven Wrapper startup batch script, version 3.3.4
+@REM
+@REM Optional ENV vars
+@REM   MVNW_REPOURL - repo url base for downloading maven distribution
+@REM   MVNW_USERNAME/MVNW_PASSWORD - user and password for downloading maven
+@REM   MVNW_VERBOSE - true: enable verbose log; others: silence the output
+@REM ----------------------------------------------------------------------------
+
+@IF "%__MVNW_ARG0_NAME__%"=="" (SET __MVNW_ARG0_NAME__=%~nx0)
+@SET __MVNW_CMD__=
+@SET __MVNW_ERROR__=
+@SET __MVNW_PSMODULEP_SAVE=%PSModulePath%
+@SET PSModulePath=
+@FOR /F "usebackq tokens=1* delims==" %%A IN (`powershell -noprofile "& {$scriptDir='%~dp0'; $script='%__MVNW_ARG0_NAME__%'; icm -ScriptBlock ([Scriptblock]::Create((Get-Content -Raw '%~f0'))) -NoNewScope}"`) DO @(
+  IF "%%A"=="MVN_CMD" (set __MVNW_CMD__=%%B) ELSE IF "%%B"=="" (echo %%A) ELSE (echo %%A=%%B)
+)
+@SET PSModulePath=%__MVNW_PSMODULEP_SAVE%
+@SET __MVNW_PSMODULEP_SAVE=
+@SET __MVNW_ARG0_NAME__=
+@SET MVNW_USERNAME=
+@SET MVNW_PASSWORD=
+@IF NOT "%__MVNW_CMD__%"=="" ("%__MVNW_CMD__%" %*)
+@echo Cannot start maven from wrapper >&2 && exit /b 1
+@GOTO :EOF
+: end batch / begin powershell #>
+
+$ErrorActionPreference = "Stop"
+if ($env:MVNW_VERBOSE -eq "true") {
+  $VerbosePreference = "Continue"
+}
+
+# calculate distributionUrl, requires .mvn/wrapper/maven-wrapper.properties
+$distributionUrl = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionUrl
+if (!$distributionUrl) {
+  Write-Error "cannot read distributionUrl property in $scriptDir/.mvn/wrapper/maven-wrapper.properties"
+}
+
+switch -wildcard -casesensitive ( $($distributionUrl -replace '^.*/','') ) {
+  "maven-mvnd-*" {
+    $USE_MVND = $true
+    $distributionUrl = $distributionUrl -replace '-bin\.[^.]*$',"-windows-amd64.zip"
+    $MVN_CMD = "mvnd.cmd"
+    break
+  }
+  default {
+    $USE_MVND = $false
+    $MVN_CMD = $script -replace '^mvnw','mvn'
+    break
+  }
+}
+
+# apply MVNW_REPOURL and calculate MAVEN_HOME
+# maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
+if ($env:MVNW_REPOURL) {
+  $MVNW_REPO_PATTERN = if ($USE_MVND -eq $False) { "/org/apache/maven/" } else { "/maven/mvnd/" }
+  $distributionUrl = "$env:MVNW_REPOURL$MVNW_REPO_PATTERN$($distributionUrl -replace "^.*$MVNW_REPO_PATTERN",'')"
+}
+$distributionUrlName = $distributionUrl -replace '^.*/',''
+$distributionUrlNameMain = $distributionUrlName -replace '\.[^.]*$','' -replace '-bin$',''
+
+$MAVEN_M2_PATH = "$HOME/.m2"
+if ($env:MAVEN_USER_HOME) {
+  $MAVEN_M2_PATH = "$env:MAVEN_USER_HOME"
+}
+
+if (-not (Test-Path -Path $MAVEN_M2_PATH)) {
+    New-Item -Path $MAVEN_M2_PATH -ItemType Directory | Out-Null
+}
+
+$MAVEN_WRAPPER_DISTS = $null
+if ((Get-Item $MAVEN_M2_PATH).Target[0] -eq $null) {
+  $MAVEN_WRAPPER_DISTS = "$MAVEN_M2_PATH/wrapper/dists"
+} else {
+  $MAVEN_WRAPPER_DISTS = (Get-Item $MAVEN_M2_PATH).Target[0] + "/wrapper/dists"
+}
+
+$MAVEN_HOME_PARENT = "$MAVEN_WRAPPER_DISTS/$distributionUrlNameMain"
+$MAVEN_HOME_NAME = ([System.Security.Cryptography.SHA256]::Create().ComputeHash([byte[]][char[]]$distributionUrl) | ForEach-Object {$_.ToString("x2")}) -join ''
+$MAVEN_HOME = "$MAVEN_HOME_PARENT/$MAVEN_HOME_NAME"
+
+if (Test-Path -Path "$MAVEN_HOME" -PathType Container) {
+  Write-Verbose "found existing MAVEN_HOME at $MAVEN_HOME"
+  Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
+  exit $?
+}
+
+if (! $distributionUrlNameMain -or ($distributionUrlName -eq $distributionUrlNameMain)) {
+  Write-Error "distributionUrl is not valid, must end with *-bin.zip, but found $distributionUrl"
+}
+
+# prepare tmp dir
+$TMP_DOWNLOAD_DIR_HOLDER = New-TemporaryFile
+$TMP_DOWNLOAD_DIR = New-Item -Itemtype Directory -Path "$TMP_DOWNLOAD_DIR_HOLDER.dir"
+$TMP_DOWNLOAD_DIR_HOLDER.Delete() | Out-Null
+trap {
+  if ($TMP_DOWNLOAD_DIR.Exists) {
+    try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
+    catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
+  }
+}
+
+New-Item -Itemtype Directory -Path "$MAVEN_HOME_PARENT" -Force | Out-Null
+
+# Download and Install Apache Maven
+Write-Verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
+Write-Verbose "Downloading from: $distributionUrl"
+Write-Verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
+
+$webclient = New-Object System.Net.WebClient
+if ($env:MVNW_USERNAME -and $env:MVNW_PASSWORD) {
+  $webclient.Credentials = New-Object System.Net.NetworkCredential($env:MVNW_USERNAME, $env:MVNW_PASSWORD)
+}
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$webclient.DownloadFile($distributionUrl, "$TMP_DOWNLOAD_DIR/$distributionUrlName") | Out-Null
+
+# If specified, validate the SHA-256 sum of the Maven distribution zip file
+$distributionSha256Sum = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionSha256Sum
+if ($distributionSha256Sum) {
+  if ($USE_MVND) {
+    Write-Error "Checksum validation is not supported for maven-mvnd. `nPlease disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties."
+  }
+  Import-Module $PSHOME\Modules\Microsoft.PowerShell.Utility -Function Get-FileHash
+  if ((Get-FileHash "$TMP_DOWNLOAD_DIR/$distributionUrlName" -Algorithm SHA256).Hash.ToLower() -ne $distributionSha256Sum) {
+    Write-Error "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised. If you updated your Maven version, you need to update the specified distributionSha256Sum property."
+  }
+}
+
+# unzip and move
+Expand-Archive "$TMP_DOWNLOAD_DIR/$distributionUrlName" -DestinationPath "$TMP_DOWNLOAD_DIR" | Out-Null
+
+# Find the actual extracted directory name (handles snapshots where filename != directory name)
+$actualDistributionDir = ""
+
+# First try the expected directory name (for regular distributions)
+$expectedPath = Join-Path "$TMP_DOWNLOAD_DIR" "$distributionUrlNameMain"
+$expectedMvnPath = Join-Path "$expectedPath" "bin/$MVN_CMD"
+if ((Test-Path -Path $expectedPath -PathType Container) -and (Test-Path -Path $expectedMvnPath -PathType Leaf)) {
+  $actualDistributionDir = $distributionUrlNameMain
+}
+
+# If not found, search for any directory with the Maven executable (for snapshots)
+if (!$actualDistributionDir) {
+  Get-ChildItem -Path "$TMP_DOWNLOAD_DIR" -Directory | ForEach-Object {
+    $testPath = Join-Path $_.FullName "bin/$MVN_CMD"
+    if (Test-Path -Path $testPath -PathType Leaf) {
+      $actualDistributionDir = $_.Name
+    }
+  }
+}
+
+if (!$actualDistributionDir) {
+  Write-Error "Could not find Maven distribution directory in extracted archive"
+}
+
+Write-Verbose "Found extracted Maven distribution directory: $actualDistributionDir"
+Rename-Item -Path "$TMP_DOWNLOAD_DIR/$actualDistributionDir" -NewName $MAVEN_HOME_NAME | Out-Null
+try {
+  Move-Item -Path "$TMP_DOWNLOAD_DIR/$MAVEN_HOME_NAME" -Destination $MAVEN_HOME_PARENT | Out-Null
+} catch {
+  if (! (Test-Path -Path "$MAVEN_HOME" -PathType Container)) {
+    Write-Error "fail to move MAVEN_HOME"
+  }
+} finally {
+  try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
+  catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
+}
+
+Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
+
+
+
+================================================
+FILE: pom.xml
+================================================
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>4.0.2</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>mx.com.qtx</groupId>
+	<artifactId>dipArq07m03explorCapaPer-1</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>dipArq07m03explorCapaPer-1</name>
+	<description>Explorar patrones de capa de datos</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
+
+
+================================================
+FILE: specs/critica-arquitectonica.md
+================================================
+Hola. Como Arquitecto de Software Senior, he revisado la nueva estructura de tu proyecto tras la implementación del requerimiento del carrito de compras. Se nota un avance significativo en la modularización, pero hay varios puntos críticos que debemos corregir para asegurar que el sistema sea escalable, mantenible y siga los estándares de la industria (especialmente si planeas que este código evolucione a algo productivo).
+
+Aquí tienes mi crítica técnica dividida por dimensiones:
+
+### 1. Coherencia en la Capa de Persistencia (El "Antipatrón de la Bolsa de Gatos")
+Actualmente, el paquete `persistencia.jpa` está sobrecargado. Contiene tres tipos de artefactos distintos que deberían estar separados:
+*   **Crítica:** Tienes **Entidades** (`Categoria.java`), **Repositorios** (`CategoriaRepository.java`) y **Gestores Manuales** (`GestorVentasJPAmanual.java`) en el mismo nivel.
+*   **Sugerencia:** Separa las entidades de la lógica de acceso.
+    *   `persistencia.model` (o `entities`): Para las clases con `@Entity`.
+    *   `persistencia.respositories`: Para las interfaces de Spring Data JPA.
+    *   `persistencia.manual` (o mantener `dao`): Para implementaciones como `GestorVentasJPAmanual`.
+
+### 2. Ambigüedad entre `negocio` y `servicios`
+Este es el punto más confuso de la arquitectura actual.
+*   **Crítica:** Tradicionalmente, la lógica de negocio **es** un servicio. Tienes `CarritoCompraService` en un paquete llamado `negocio`, mientras que en el paquete `servicios` tienes DTOs y clases de prueba (`ProbadorCapaDatos`).
+*   **Sugerencia:** 
+    *   Renombra `negocio` a `servicios`.
+    *   Mueve los DTOs a su propio paquete de alto nivel (ej. `mx.com.qtx.dto`) o dentro de `servicios.dto`.
+    *   **Importante:** Los `ProbadorCapaDatos` (CommandLineRunners) no deberían estar en la ruta de clases principal de servicios. Deberían estar en un paquete de `config` o `util` con un perfil de Spring (@Profile("dev")), o idealmente, ser reemplazados por **Tests de Integración** en `src/test/java`.
+
+### 3. Fuga de Abstracción (Entities en la Capa Web)
+*   **Crítica:** Veo que conservas los DTOs en `servicios/dto`, pero los controladores web suelen verse tentados a usar las Entidades JPA directamente para mostrarlas en Thymeleaf.
+*   **Riesgo:** Si el `CatalogoController` pasa una entidad `Categoria` a la vista y Thymeleaf intenta acceder a `categoria.getProductos()` (que es Lazy), lanzará una `LazyInitializationException` porque la sesión de JPA ya se cerró.
+*   **Sugerencia:** La capa web **solo** debería conocer DTOs. El flujo correcto es:
+    `Repository -> Service (convierte Entity a DTO) -> Controller -> View`.
+
+### 4. Coexistencia de Patrones (JDBC vs JPA manual vs Spring Data)
+*   **Crítica:** Tienes `GestorVentasDAO` (JDBC), `GestorVentasJPAmanual` (EntityManager) y `CategoriaRepository` (Spring Data).
+*   **Arquitecto Senior dice:** Entiendo que es un proyecto de exploración, pero para el requerimiento del carrito, deberías elegir un **"Golden Path"**. Mezclar los tres estilos de persistencia en la misma lógica de negocio (Carrito) hará que las transacciones sean imposibles de gestionar de forma atómica.
+*   **Sugerencia:** Define qué patrón es el oficial para las nuevas funcionalidades y deja los otros como "Legacy" claramente marcados.
+
+### 5. Estructura de Recursos y Vistas
+*   **Crítica:** La carpeta `templates` está bien, pero a medida que el proyecto crezca, tener todos los HTML en la raíz de `templates` será un caos.
+*   **Sugerencia:** Organiza por dominios:
+    *   `templates/catalogo/` (categorias, productos)
+    *   `templates/carrito/` (carrito)
+    *   `templates/layout/` (para fragmentos reutilizables como el header/footer).
+
+---
+
+### Resumen de la Estructura Sugerida (Refactorización)
+
+```text
+mx.com.qtx.dipArq07m03explorCapaPer/
+├── api/ (o web)
+│   ├── CatalogoController.java
+│   └── CarritoController.java
+├── core/ (Lógica de negocio pura)
+│   ├── model/ (Entidades JPA)
+│   ├── services/ (Interfaces y servicios como CarritoCompraService)
+│   └── dto/ (Objetos de transferencia de datos)
+├── infrastructure/ (Detalles técnicos)
+│   ├── persistence/
+│   │   ├── repositories/ (Spring Data JPA)
+│   │   └── legacy/ (DAO JDBC y JPA Manual)
+│   └── config/ (Configuraciones de Spring)
+└── DipArq07m03explorCapaPer1Application.java
+```
+
+### Conclusión
+El proyecto ha ganado funcionalidad, pero ha perdido **limpieza en los límites de cada capa**. La lógica del carrito (`negocio`) es el corazón de tu aplicación; no debería estar "apretada" entre los controladores y la persistencia. Si ordenas los paquetes ahora, agregar la funcionalidad de "Finalizar Compra" o "Pasarela de Pagos" será mucho más fácil después.
+
+**¿Mi recomendación inmediata?** Mueve las interfaces de repositorio a su propio paquete y decide si vas a usar DTOs o Entidades en la UI para evitar errores de Lazy Loading.
+
+
+
+================================================
+FILE: specs/primer-spec.md
+================================================
+Actúa como un Desarrollador Senior de Java y Spring Boot. Tengo un proyecto existente en Java 21 con Spring Boot que actualmente explora la capa de persistencia usando JPA y JDBC. 
+
+El objetivo es extender este proyecto para agregar una interfaz web MVC básica que permita a un usuario:
+1. Ver un catálogo de Categorías.
+2. Hacer clic en una categoría para ver los Productos asociados.
+3. Ver el detalle de un Producto específico.
+4. Agregar ese producto a un "Carrito de Compras" en memoria (sesión).
+
+Por favor, genera el código necesario siguiendo estos pasos de forma iterativa:
+
+**PASO 1: Dependencias**
+Indícame qué dependencias debo agregar al `pom.xml` para habilitar Spring Web y Thymeleaf.
+
+**PASO 2: Capa de Repositorios (Spring Data JPA)**
+Actualmente uso un `EntityManager` manual (`GestorVentasJPAmanual`), pero dado que ya tengo `spring-boot-starter-data-jpa` en el pom, quiero crear interfaces de Spring Data JPA para hacer esto más ágil:
+- Crea `CategoriaRepository` y `ProductoRepository`.
+
+**PASO 3: Lógica del Carrito de Compras**
+Crea una clase `CarritoCompraService` y un modelo `ItemCarrito`.
+- El servicio debe estar anotado con `@SessionScope` para mantener el estado por usuario.
+- Debe tener métodos para: agregar producto (recibiendo el ID del producto y cantidad), ver ítems, y calcular el total.
+
+**PASO 4: Capa de Controladores (Spring MVC)**
+Crea un `CatalogoController` que maneje las siguientes rutas:
+- `GET /` o `GET /categorias`: Muestra la lista de categorías.
+- `GET /categorias/{id}`: Muestra los productos de esa categoría.
+- `GET /productos/{id}`: Muestra el detalle de un producto con un formulario para agregarlo al carrito.
+Crea un `CarritoController`:
+- `POST /carrito/agregar`: Procesa el formulario y agrega al carrito.
+- `GET /carrito`: Muestra el contenido del carrito.
+
+**PASO 5: Vistas (Thymeleaf)**
+Genera el código HTML básico usando Thymeleaf (con clases de Bootstrap por CDN para que se vea decente) para las siguientes vistas en `src/main/resources/templates/`:
+1. `categorias.html`
+2. `productos-por-categoria.html`
+3. `detalle-producto.html`
+4. `carrito.html`
+
+**Consideraciones importantes:**
+- Utiliza las entidades JPA existentes (`Categoria`, `Producto`).
+- El proyecto actualmente usa un `CommandLineRunner` (`ProbadorCapaDatosJPA`). Indícame cómo desactivarlo (por ejemplo, comentando la anotación `@Component`) para que no interfiera con el arranque web.
+- Maneja correctamente la carga perezosa (Lazy Loading) ya que `Categoria` tiene `@OneToMany(fetch = FetchType.LAZY) private List<Producto> productos;`.
+
+Dame el código archivo por archivo con su ruta respectiva.
+
+Para que tengas un entendimiento exacto del flujo arquitectónico y de navegación que espero, guíate estrictamente por los siguientes diagramas UML en formato Mermaid:
+
+```
+sequenceDiagram
+    actor Usuario
+    participant CatalogoCtrl as CatalogoController
+    participant CarritoCtrl as CarritoController
+    participant Repos as Repositories (JPA)
+    participant CarritoSvc as CarritoCompraService (@SessionScope)
+    participant Vistas as Vistas (Thymeleaf)
+
+    %% 1. Ver Catálogo de Categorías
+    Usuario->>CatalogoCtrl: GET /categorias (o /)
+    CatalogoCtrl->>Repos: findAll() categorias
+    Repos-->>CatalogoCtrl: List<Categoria>
+    CatalogoCtrl->>Vistas: render(categorias.html)
+    Vistas-->>Usuario: Muestra listado de Categorías
+
+    %% 2. Ver Productos de una Categoría
+    Usuario->>CatalogoCtrl: GET /categorias/{id}
+    CatalogoCtrl->>Repos: findByIdWithProductos(id)
+    Repos-->>CatalogoCtrl: Categoria + List<Producto>
+    CatalogoCtrl->>Vistas: render(productos-por-categoria.html)
+    Vistas-->>Usuario: Muestra listado de Productos
+
+    %% 3. Ver Detalle del Producto
+    Usuario->>CatalogoCtrl: GET /productos/{id}
+    CatalogoCtrl->>Repos: findById(id)
+    Repos-->>CatalogoCtrl: Producto
+    CatalogoCtrl->>Vistas: render(detalle-producto.html)
+    Vistas-->>Usuario: Muestra Detalle y Formulario 'Agregar'
+
+    %% 4. Agregar al Carrito
+    Usuario->>CarritoCtrl: POST /carrito/agregar (productoId, cantidad)
+    CarritoCtrl->>Repos: findById(productoId)
+    Repos-->>CarritoCtrl: Producto
+    CarritoCtrl->>CarritoSvc: agregarProducto(Producto, cantidad)
+    CarritoSvc-->>CarritoCtrl: Actualiza estado en Sesión
+    CarritoCtrl->>Usuario: REDIRECT /carrito
+
+    %% 5. Ver Carrito
+    Usuario->>CarritoCtrl: GET /carrito
+    CarritoCtrl->>CarritoSvc: getItems(), getTotal()
+    CarritoSvc-->>CarritoCtrl: List<ItemCarrito>, BigDecimal
+    CarritoCtrl->>Vistas: render(carrito.html)
+    Vistas-->>Usuario: Muestra Carrito de Compras
+
+```
+
+```
+
+graph TD
+    classDef page fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef action fill:#fff3e0,stroke:#e65100,stroke-width:2px,stroke-dasharray: 5 5;
+
+    A["🏠 Pantalla: Categorías<br/>(GET /categorias)"]:::page
+    B["📦 Pantalla: Productos por Categoría<br/>(GET /categorias/{id})"]:::page
+    C["🔍 Pantalla: Detalle de Producto<br/>(GET /productos/{id})"]:::page
+    D{"⚙️ Acción: Procesar Formulario<br/>(POST /carrito/agregar)"}:::action
+    E["🛒 Pantalla: Carrito de Compras<br/>(GET /carrito)"]:::page
+
+    A -->|Clic en una Categoría| B
+    B -->|Clic en un Producto| C
+    B -->|Volver| A
+    C -->|Llenar cantidad y enviar form| D
+    C -->|Volver| B
+    D -->|Redirección automática 302| E
+    E -->|Seguir comprando| A
+```
+
+
+
+================================================
+FILE: specs/segundo-spec.md
+================================================
+**Contexto:**
+Necesito implementar un sistema de monitoreo técnico para auditar el comportamiento de la aplicación bajo condiciones de concurrencia y gestión de sesiones.
+
+**Objetivo:**
+Implementar filtros y listeners que permitan visualizar en los logs: qué hilos están atendiendo qué peticiones, la duración de las mismas, y el conteo exacto de sesiones de usuario activas.
+
+**Tareas requeridas:**
+
+1.  **Configuración de Logs (MDC):**
+    *   Modifica `application.properties` para definir un patrón de log que incluya variables de MDC (Mapped Diagnostic Context): `requestId` y `threadName`.
+
+2.  **Filtro de Monitoreo de Concurrencia (Request Level):**
+    *   Crea una clase `ConcurrencyTrackingFilter` que extienda de `OncePerRequestFilter`.
+    *   Debe generar un `UUID` corto como `requestId` al inicio de cada petición.
+    *   Debe inyectar en el MDC el `requestId` y el nombre del hilo actual (`Thread.currentThread().getName()`).
+    *   Debe registrar (log) el inicio de la petición (URI y Método) y el final, calculando el tiempo de ejecución en milisegundos.
+    *   Asegúrate de limpiar el MDC en un bloque `finally`.
+
+3.  **Listener de Sesiones HTTP (Session Level):**
+    *   Crea una clase `SessionMonitoringListener` que implemente `HttpSessionListener`.
+    *   Utiliza un `AtomicInteger` para llevar el conteo de sesiones activas de forma thread-safe.
+    *   Registra en logs cada vez que una sesión es creada o destruida, mostrando el ID de la sesión y el número total de usuarios concurrentes.
+
+4.  **Auditoría del Ciclo de Vida del Carrito:**
+    *   En la clase `CarritoCompraService` (que es `@SessionScope`), añade métodos anotados con `@PostConstruct` y `@PreDestroy`.
+    *   Añade logs informativos en estos métodos para identificar exactamente cuándo Spring instancia y destruye el carrito de un usuario.
+
+5.  **Organización de Archivos:**
+    *   Ubica los componentes de monitoreo en un nuevo paquete llamado `mx.com.qtx.dipArq07m03explorCapaPer.monitoring`.
+
+**Restricciones técnicas:**
+*   Usa `jakarta.servlet` (no `javax.servlet`).
+*   Asegúrate de que los componentes sean detectados por Spring (usando `@Component`).
+*   El código debe ser thread-safe.
+
+***
+
+
+
+================================================
+FILE: specs/why-session-as-service.md
+================================================
+1. ¿Cómo funciona la sesión que se implementó?
+En una aplicación web tradicional, los servidores no tienen estado (son stateless). Esto significa que el servidor no recuerda quién eres entre una petición (clic) y otra.
+
+Para resolver esto, usamos la anotación @SessionScope. Lo que hace internamente Spring Boot es lo siguiente:
+
+Instancias únicas por usuario: Cada vez que un nuevo navegador (usuario) entra a la tienda, Spring Boot crea una nueva instancia exclusiva de la clase 
+
+CarritoCompraService
+ solo para ese usuario.
+El Proxy Mágico: Aunque nuestro 
+
+CarritoController
+ es un Singleton (solo existe uno en todo el servidor para atender a todos los usuarios simultáneamente), Spring inyecta un "Proxy" (un intermediario falso) en lugar del servicio real.
+Enrutamiento automático: Cuando un usuario hace una petición (ej. POST /carrito/agregar), ese Proxy detecta automáticamente el ID de sesión (JSESSIONID) que viene en las cookies del navegador del usuario y redirige la llamada a la instancia exacta de 
+
+CarritoCompraService
+ que le pertenece a esa persona.
+Así logramos que si Juan agrega unos tenis y María agrega una camisa al mismo tiempo, las listas de items en memoria no se mezclen.
+
+2. ¿Por qué se usó @Service y no @Component?
+Técnicamente hablando, funcionarían exactamente igual. En Spring framework, @Service es simplemente una especialización (un estereotipo) de la anotación genérica @Component. Si vas al código fuente de Spring, verás que @Service está anotada internamente con @Component.
+
+Sin embargo, decidimos usar @Service por tres motivos principales de Diseño y Arquitectura de Software:
+
+Semántica y Claridad (Domain-Driven Design): @Service le dice inmediatamente a cualquier otro programador que lea el código: "Esta clase contiene la Lógica de Negocio de la aplicación". Un carrito de compras no es solo una utilidad genérica de infraestructura (donde encajaría mejor @Component), sino que define operaciones vitales del dominio del negocio (agregar productos, calcular subtotales, reglas de descuentos, etc).
+Patrón de Capas: Mantiene limpia la arquitectura de capas típica de Spring:
+Capa de Presentación: Controladores (@Controller)
+Capa de Lógica de Negocio: Servicios (@Service)
+Capa de Acceso a Datos: Repositorios (@Repository)
+Evolución futura: Si en el futuro quisieras agregar transaccionalidad al carrito (por ejemplo, con @Transactional al momento de convertir el carrito en un pedido en la base de datos), o intercepción de métodos (AOP), Spring está optimizado para aplicar este tipo de aspectos a las clases en la capa de Servicio.
+En resumen: Usamos @SessionScope para aislar los datos cliente por cliente, y usamos @Service (en lugar de @Component) para darle un significado arquitectónico correcto, dejando claro que ahí vive la inteligencia del negocio.
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/DipArq07m03explorCapaPer1Application.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DipArq07m03explorCapaPer1Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(DipArq07m03explorCapaPer1Application.class, args);
+	}
+
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/monitoring/ConcurrencyTrackingFilter.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.monitoring;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.util.UUID;
+
+@Component
+public class ConcurrencyTrackingFilter extends OncePerRequestFilter {
+
+    private static final Logger log = LoggerFactory.getLogger(ConcurrencyTrackingFilter.class);
+    private static final String REQUEST_ID = "requestId";
+    private static final String THREAD_NAME = "threadName";
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        
+        // 1. Generar variables de entorno de diagnostico MDC
+        String requestId = UUID.randomUUID().toString().substring(0, 8); // UUID Corto para legibilidad
+        String threadName = Thread.currentThread().getName();
+
+        // 2. Inyectar en MDC
+        MDC.put(REQUEST_ID, requestId);
+        MDC.put(THREAD_NAME, threadName);
+
+        long startTime = System.currentTimeMillis();
+
+        try {
+            log.info(">> Iniciando peticion [{} {}]", request.getMethod(), request.getRequestURI());
+            
+            // 3. Continuar la cadena de filtros hacia el controlador
+            filterChain.doFilter(request, response);
+            
+            long duration = System.currentTimeMillis() - startTime;
+            log.info("<< Finalizando peticion [{} {}] - Status: {} - Duracion: {} ms", 
+                    request.getMethod(), request.getRequestURI(), response.getStatus(), duration);
+                    
+        } finally {
+            // 4. Limpieza OBLIGATORIA para evitar fugas en el ThreadPool
+            MDC.remove(REQUEST_ID);
+            MDC.remove(THREAD_NAME);
+        }
+    }
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/monitoring/SessionMonitoringListener.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.monitoring;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import jakarta.servlet.http.HttpSessionEvent;
+import jakarta.servlet.http.HttpSessionListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
+@Configuration
+public class SessionMonitoringListener implements HttpSessionListener {
+
+    private static final Logger log = LoggerFactory.getLogger(SessionMonitoringListener.class);
+    
+    // Contador Atomico (Thread-safe) para concurrencia extrema
+    private final AtomicInteger activeSessions = new AtomicInteger(0);
+
+    @Override
+    public void sessionCreated(HttpSessionEvent se) {
+        int current = activeSessions.incrementAndGet();
+        log.info("+++ NUEVA SESION CREADA: [{}] - Total usuarios activos: {}", se.getSession().getId(), current);
+    }
+
+    @Override
+    public void sessionDestroyed(HttpSessionEvent se) {
+        int current = activeSessions.decrementAndGet();
+        log.info("--- SESION DESTRUIDA: [{}] - Total usuarios activos restantes: {}", se.getSession().getId(), current);
+    }
+
+    @Bean
+    public ServletListenerRegistrationBean<HttpSessionListener> sessionListener() {
+        ServletListenerRegistrationBean<HttpSessionListener> listenerRegBean = new ServletListenerRegistrationBean<>();
+        listenerRegBean.setListener(this);
+        return listenerRegBean;
+    }
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/negocio/CarritoCompraService.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.negocio;
+
+import mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa.Producto;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.SessionScope;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Service
+@SessionScope
+public class CarritoCompraService {
+
+    private static final Logger log = LoggerFactory.getLogger(CarritoCompraService.class);
+
+    private List<ItemCarrito> items = new ArrayList<>();
+
+    @PostConstruct
+    public void onInit() {
+        log.info("*** CARRITO CREADO: Bean instanciado temporalmente en memoria para este usuario ***");
+    }
+
+    @PreDestroy
+    public void onDestroy() {
+        log.info("*** CARRITO DESTRUIDO: Memoria liberada. El usuario {} perdio su sesion. ***", this.hashCode());
+    }
+
+    public void agregarProducto(Producto producto, int cantidad) {
+        Optional<ItemCarrito> itemExistente = items.stream()
+                .filter(item -> item.getProducto().getId().equals(producto.getId()))
+                .findFirst();
+
+        if (itemExistente.isPresent()) {
+            ItemCarrito item = itemExistente.get();
+            item.setCantidad(item.getCantidad() + cantidad);
+        } else {
+            items.add(new ItemCarrito(producto, cantidad));
+        }
+    }
+
+    public List<ItemCarrito> getItems() {
+        return items;
+    }
+
+    public BigDecimal getTotal() {
+        return items.stream()
+                .map(ItemCarrito::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+    
+    public void vaciarCarrito() {
+    	items.clear();
+    }
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/negocio/ItemCarrito.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.negocio;
+
+import mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa.Producto;
+import java.math.BigDecimal;
+
+public class ItemCarrito {
+
+    private Producto producto;
+    private int cantidad;
+
+    public ItemCarrito(Producto producto, int cantidad) {
+        this.producto = producto;
+        this.cantidad = cantidad;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public BigDecimal getSubtotal() {
+        if (producto != null && producto.getPrecio() != null && producto.getPrecio().compareTo(BigDecimal.ZERO) > 0) {
+            return producto.getPrecio().multiply(BigDecimal.valueOf(cantidad));
+        }
+        return BigDecimal.ZERO;
+    }
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/dao/GestorVentasDAO.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.dao;
+
+import java.math.BigDecimal;
+import java.nio.charset.Charset;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import mx.com.qtx.dipArq07m03explorCapaPer.servicios.IGestorDatos;
+import mx.com.qtx.dipArq07m03explorCapaPer.servicios.dto.CategoriaDTO;
+import mx.com.qtx.dipArq07m03explorCapaPer.servicios.dto.CategoriaProductoDTO;
+
+@Repository	
+public class GestorVentasDAO implements IGestorDatos {
+	@Autowired
+	DataSource ds;
+	
+	private static Logger log = LoggerFactory.getLogger(GestorVentasDAO.class);
+	
+	public CategoriaDTO leerCategoriaXID(int id) throws SQLException {
+		
+		String sqlConsulta = "SELECT cat_id_categoria, cat_nombre, cat_descripcion "
+							+ "FROM cat_categoria "
+							+ "WHERE cat_id_categoria = ?";
+		
+		try(Connection con = this.ds.getConnection()){
+			try( PreparedStatement pst= con.prepareStatement(sqlConsulta)){
+				pst.setInt(1, id);
+				try(ResultSet rs = pst.executeQuery()){
+					if(rs.next()) {
+						String nombre = rs.getString("cat_nombre");
+						String descripcion = rs.getString("cat_descripcion");
+						return new CategoriaDTO(id, nombre, descripcion);
+					}
+				}
+				
+			}
+		}
+		
+		return null;
+	}
+	
+	public List<CategoriaProductoDTO> leerProductosConCategorias(int id) throws SQLException{
+		List<CategoriaProductoDTO> lstCatsYprods = new ArrayList<>();
+		String sqlConsulta = "SELECT cat_id_categoria, cat_nombre, cat_descripcion, "
+				                  + "prd_nombre, prd_descripcion, prd_precio "
+				           + "FROM cat_categoria "
+				           + "JOIN prd_producto ON prd_id_categoria = cat_id_categoria "
+				           + "WHERE cat_id_categoria = ?";
+		
+		try(Connection con = this.ds.getConnection()){
+			try( PreparedStatement pst= con.prepareStatement(sqlConsulta)){
+				pst.setInt(1, id);
+				try(ResultSet rs = pst.executeQuery()){
+					while(rs.next()) {
+						String catNombre = rs.getString("cat_nombre");
+						String catDireccion = rs.getString("cat_descripcion");
+						String prdNombre = rs.getString("prd_nombre");
+						String prdDireccion = rs.getString("prd_descripcion");
+						BigDecimal prdPrecio = rs.getBigDecimal("prd_precio");
+						
+						lstCatsYprods.add(new CategoriaProductoDTO(id, catNombre, catDireccion, prdNombre, prdDireccion, prdPrecio));
+					}
+				}
+				
+			}
+		}		
+		return lstCatsYprods;
+	}
+	
+	public void probarJdbc() throws SQLException {
+		String charsetActivo = Charset.defaultCharset().toString();
+		log.info("charset usado:" + charsetActivo);
+		log.info("Funcionando");
+		String sqlConsulta = "SELECT * FROM cat_categoria";
+		try( Connection con = this.ds.getConnection() ){
+			if(con != null) {
+				log.info("Se obtuvo la conexion a la BD a " + con.getCatalog());
+			}
+			try (Statement stmt = con.createStatement()){
+				stmt.execute(sqlConsulta);
+				try( ResultSet rs = stmt.getResultSet()){
+					while(rs.next()) {
+						int catId = rs.getInt("cat_id_categoria");
+						String catNombre = rs.getString("cat_nombre");
+						log.info(catId + ": " + catNombre);
+					}
+				}
+			}
+		}
+	}
+	
+	public int crearCategoria(CategoriaDTO categoria) throws SQLException {
+
+	    String sql = """
+	        INSERT INTO cat_categoria (cat_nombre, cat_descripcion)
+	        VALUES (?, ?)
+	    """;
+
+	    try (Connection con = ds.getConnection();
+	         PreparedStatement pst = con.prepareStatement(
+	                 sql, Statement.RETURN_GENERATED_KEYS)) {
+
+	        pst.setString(1, categoria.nombre());
+	        pst.setString(2, categoria.descripcion());
+
+	        pst.executeUpdate();
+
+	        try (ResultSet rs = pst.getGeneratedKeys()) {
+	            if (rs.next()) {
+	                return rs.getInt(1);
+	            }
+	        }
+	    }
+	    //TODO Mejorar estartegia de manejo de error ¿Que pasa si hay un error originado por otra causa?
+	    throw new SQLException("No se pudo generar el id de la categoría");
+	}
+	
+	public void actualizarCategoria(CategoriaDTO categoria) throws SQLException {
+
+	    String sql = """
+	        UPDATE cat_categoria
+	        SET cat_nombre = ?, cat_descripcion = ?
+	        WHERE cat_id_categoria = ?
+	    """;
+
+	    try (Connection con = ds.getConnection();
+	         PreparedStatement pst = con.prepareStatement(sql)) {
+
+	        pst.setString(1, categoria.nombre());
+	        pst.setString(2, categoria.descripcion());
+	        pst.setInt(3, categoria.id());
+
+	        int filas = pst.executeUpdate();
+
+	        if (filas != 1) {
+	            throw new SQLException(
+	                "Actualización fallida. Categoría inexistente o múltiple."
+	            );
+	        }
+	    }
+	}
+	
+	public void eliminarCategoria(int idCategoria) throws SQLException {
+
+	    String sql = "DELETE FROM cat_categoria WHERE cat_id_categoria = ?";
+
+	    try (Connection con = ds.getConnection();
+	         PreparedStatement pst = con.prepareStatement(sql)) {
+
+	        pst.setInt(1, idCategoria);
+	        pst.executeUpdate();
+	    }
+	}
+
+	public List<CategoriaDTO> listarCategorias() throws SQLException {
+
+	    List<CategoriaDTO> categorias = new ArrayList<>();
+
+	    String sql = """
+	        SELECT cat_id_categoria, cat_nombre, cat_descripcion
+	        FROM cat_categoria
+	        ORDER BY cat_nombre
+	    """;
+
+	    try (Connection con = ds.getConnection();
+	         PreparedStatement pst = con.prepareStatement(sql);
+	         ResultSet rs = pst.executeQuery()) {
+
+	        while (rs.next()) {
+	            categorias.add(new CategoriaDTO(
+	                rs.getInt("cat_id_categoria"),
+	                rs.getString("cat_nombre"),
+	                rs.getString("cat_descripcion")
+	            ));
+	        }
+	    }
+
+	    return categorias;
+	}
+
+
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/Categoria.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "cat_categoria")
+public class Categoria {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cat_id_categoria")
+    private Integer id;
+
+    @Column(name = "cat_nombre", nullable = false)
+    private String nombre;
+
+    @Column(name = "cat_descripcion")
+    private String descripcion;
+
+    @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
+    private List<Producto> productos;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public List<Producto> getProductos() {
+		return productos;
+	}
+
+	public void setProductos(List<Producto> productos) {
+		this.productos = productos;
+	}
+
+	@Override
+	public String toString() {
+		return "Categoria [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", productos="
+				+ productos + "]";
+	}
+    
+    
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/CategoriaRepository.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
+
+    @Query("SELECT c FROM Categoria c JOIN FETCH c.productos WHERE c.id = :id")
+    Optional<Categoria> findByIdWithProductos(@Param("id") Integer id);
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/Cliente.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "cli_cliente")
+public class Cliente {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cli_id_cliente")
+    private Long id;
+
+    @Column(name = "cli_nombre", nullable = false, length = 150)
+    private String nombre;
+
+    @Column(name = "cli_email", length = 150)
+    private String email;
+
+    @Column(name = "cli_telefono", length = 20)
+    private String telefono;
+
+    @Column(name = "cli_direccion_fiscal", length = 255)
+    private String direccionFiscal;
+
+    @Column(name = "cli_direccion_entrega", length = 255)
+    private String direccionEntrega;
+
+    @Column(name = "cli_saldo", nullable = false, precision = 12, scale = 2)
+    private BigDecimal saldo;
+
+    @Column(name = "cli_limite_credito", precision = 12, scale = 2)
+    private BigDecimal limiteCredito;
+
+    @OneToMany(mappedBy = "cliente")
+    private List<Venta> ventas = new ArrayList<>();
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/DetallePedido.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "dtp_detalle_pedido")
+public class DetallePedido {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "dtp_num_detalle")
+    private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "dtp_id_pedido", nullable = false)
+    private Pedido pedido;
+
+    @ManyToOne
+    @JoinColumn(name = "dtp_id_producto", nullable = false)
+    private Producto producto;
+
+    @Column(name = "dtp_cantidad", nullable = false)
+    private Integer cantidad;
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/DetalleVenta.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import java.math.BigDecimal;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "dtv_detalle_venta")
+public class DetalleVenta {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "dtv_num_detalle")
+    private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "dtv_num_venta", nullable = false)
+    private Venta venta;
+
+    @ManyToOne
+    @JoinColumn(name = "dtv_id_producto", nullable = false)
+    private Producto producto;
+
+    @Column(name = "dtv_cantidad", nullable = false)
+    private Integer cantidad;
+
+    @Column(name = "dtv_precio_unitario", nullable = false)
+    private BigDecimal precioUnitario;
+
+    public BigDecimal calcularImporte() {
+        return precioUnitario.multiply(BigDecimal.valueOf(cantidad));
+    }
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/Empleado.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "emp_empleado")
+public class Empleado {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "emp_id_empleado")
+    private Long id;
+
+    @Column(name = "emp_nombre", nullable = false, length = 100)
+    private String nombre;
+
+    @Column(name = "emp_apellido_paterno", nullable = false, length = 100)
+    private String apellidoPaterno;
+
+    @Column(name = "emp_apellido_materno", length = 100)
+    private String apellidoMaterno;
+
+    @Column(name = "emp_telefono", length = 20)
+    private String telefono;
+
+    @Column(name = "emp_fecha_contratacion", nullable = false)
+    private LocalDate fechaContratacion;
+
+    @Column(name = "emp_fecha_nacimiento", nullable = false)
+    private LocalDate fechaNacimiento;
+
+    @Column(name = "emp_salario", nullable = false, precision = 12, scale = 2)
+    private BigDecimal salario;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "emp_tipo_empleado", nullable = false)
+    private TipoEmpleado tipoEmpleado;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "emp_id_rol", nullable = false)
+    private Rol rol;
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/GestorVentasJPAmanual.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.EntityManager;
+import mx.com.qtx.dipArq07m03explorCapaPer.servicios.IGestorDatosAltoNivel;
+import mx.com.qtx.dipArq07m03explorCapaPer.servicios.ProbadorCapaDatosJPA;
+
+
+@Repository
+public class GestorVentasJPAmanual implements IGestorDatosAltoNivel {
+	private static Logger log = LoggerFactory.getLogger(GestorVentasJPAmanual.class);
+	
+	@Autowired
+	EntityManager em;
+
+	@Override
+	public Categoria leerCategoriaXID(int id)  {
+		Categoria categoria = this.em.find(Categoria.class, id);
+		log.info("Se ha leido con éxito la categoria " + categoria.getNombre());
+		return categoria;
+	}
+	
+	@Override
+	@Transactional
+	public Categoria leerCategoriaXID_conProductos(int id)  {
+		log.info("La Implementacion del entity manager es :" + this.em.getClass().getName());
+		Categoria categoria = this.em.find(Categoria.class, id);
+		log.info("Se ha leido con éxito la categoria " + categoria.getNombre());
+		if(em.isOpen()) {
+			log.info("Entity manager esta abierto");
+			categoria.getProductos().size();
+		}
+		else {
+			log.warn("Entity manager esta cerrado!");
+		}
+		return categoria;
+	}
+
+
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/InventarioProducto.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import java.time.LocalDate;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "inv_inventario_producto")
+public class InventarioProducto {
+
+    @Id
+    @Column(name = "inv_id_producto", length = 50)
+    private String id;
+
+    @MapsId
+    @OneToOne(optional = false)
+    @JoinColumn(name = "inv_id_producto", nullable = false)
+    private Producto producto;
+
+    @Column(name = "inv_existencia", nullable = false)
+    private Integer existencia;
+
+    @Column(name = "inv_existencia_minima", nullable = false)
+    private Integer existenciaMinima;
+
+    @Column(name = "inv_existencia_maxima", nullable = false)
+    private Integer existenciaMaxima;
+
+    @Column(name = "inv_punto_reorden", nullable = false)
+    private Integer puntoReorden;
+
+    @Column(name = "inv_fecha_actualizacion", nullable = false)
+    private LocalDate fechaActualizacion;
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/Pedido.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "ped_pedido")
+public class Pedido {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ped_id_pedido")
+    private Long id;
+
+    @Column(name = "ped_fecha_pedido", nullable = false)
+    private LocalDate fechaPedido;
+
+    @ManyToOne
+    @JoinColumn(name = "ped_id_proveedor", nullable = false)
+    private Proveedor proveedor;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<DetallePedido> detalles = new ArrayList<>();
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/Producto.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import java.math.BigDecimal;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "prd_producto")
+public class Producto {
+
+    @Id
+    @Column(name = "prd_id_producto", length = 50)
+    private String id;
+
+    @Column(name = "prd_nombre", nullable = false, length = 150)
+    private String nombre;
+
+    @Column(name = "prd_descripcion", length = 255)
+    private String descripcion;
+
+    @Column(name = "prd_precio", nullable = false, precision = 12, scale = 2)
+    private BigDecimal precio;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "prd_id_categoria", nullable = false)
+    private Categoria categoria;
+
+    @OneToOne(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private InventarioProducto inventario;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public BigDecimal getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(BigDecimal precio) {
+		this.precio = precio;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public InventarioProducto getInventario() {
+		return inventario;
+	}
+
+	public void setInventario(InventarioProducto inventario) {
+		this.inventario = inventario;
+	}
+
+	@Override
+	public String toString() {
+		return "Producto [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", precio=" + precio
+				+ ", categoria=" + categoria.getId() + ", inventario=" + inventario + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+	}
+    
+    
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/ProductoRepository.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ProductoRepository extends JpaRepository<Producto, String> {
+
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/Proveedor.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "prv_proveedor")
+public class Proveedor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "prv_id_proveedor")
+    private Long id;
+
+    @Column(name = "prv_nombre", nullable = false)
+    private String nombre;
+
+    @Column(name = "prv_telefono")
+    private String telefono;
+
+    @OneToMany(mappedBy = "proveedor")
+    private List<Pedido> pedidos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "proveedor")
+    private List<ProveedorPrimarioProd> productos = new ArrayList<>();
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/ProveedorPrimarioProd.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "ppp_proveedor_primario_prod")
+public class ProveedorPrimarioProd {
+
+    @EmbeddedId
+    private ProveedorPrimarioProdId id;
+
+    @ManyToOne
+    @MapsId("idProducto")
+    @JoinColumn(name = "ppp_id_producto")
+    private Producto producto;
+
+    @ManyToOne
+    @MapsId("idProveedor")
+    @JoinColumn(name = "ppp_id_proveedor")
+    private Proveedor proveedor;
+
+    @Column(name = "ppp_prioridad", nullable = false)
+    private Integer prioridad;
+
+    @Column(name = "ppp_condiciones")
+    private String condiciones;
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/ProveedorPrimarioProdId.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import java.io.Serializable;
+
+import jakarta.persistence.*;
+
+@Embeddable
+public class ProveedorPrimarioProdId implements Serializable {
+
+    @Column(name = "ppp_id_producto")
+    private String idProducto;
+
+    @Column(name = "ppp_id_proveedor")
+    private Long idProveedor;
+
+    // equals() y hashCode() obligatorios
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/Rol.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "rol_rol")
+public class Rol {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "rol_id_rol")
+    private Integer id;
+
+    @Column(name = "rol_nombre", nullable = false, length = 100)
+    private String nombre;
+
+    @Column(name = "rol_descripcion", length = 255)
+    private String descripcion;
+
+    @OneToMany(mappedBy = "rol")
+    private List<Empleado> empleados = new ArrayList<>();
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/Tienda.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "tie_tienda")
+public class Tienda {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "tie_id_tienda")
+    private Integer id;
+
+    @Column(name = "tie_razon_social", nullable = false, length = 150)
+    private String razonSocial;
+
+    @Column(name = "tie_direccion", nullable = false, length = 255)
+    private String direccion;
+
+    @Column(name = "tie_telefono", length = 20)
+    private String telefono;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "tie_id_empleado_encargado", nullable = false)
+    private Empleado encargado;
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/TipoEmpleado.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+public enum TipoEmpleado {
+    ENCARGADO, VENDEDOR
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/persistencia/jpa/Venta.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "ven_venta")
+public class Venta {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ven_num_venta")
+    private Long id;
+
+    @Column(name = "ven_fecha", nullable = false)
+    private LocalDate fecha;
+
+    @Column(name = "ven_direccion_entrega", length = 255)
+    private String direccionEntrega;
+
+    @Column(name = "ven_telefono", length = 20)
+    private String telefono;
+
+    @Column(name = "ven_saldo", nullable = false, precision = 12, scale = 2)
+    private BigDecimal saldo;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "ven_id_empleado_vendedor", nullable = false)
+    private Empleado vendedor;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "ven_id_cliente", nullable = false)
+    private Cliente cliente;
+
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleVenta> detalles = new ArrayList<>();
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/servicios/IGestorDatos.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.servicios;
+
+import java.util.List;
+
+import mx.com.qtx.dipArq07m03explorCapaPer.servicios.dto.CategoriaDTO;
+import mx.com.qtx.dipArq07m03explorCapaPer.servicios.dto.CategoriaProductoDTO;
+
+public interface IGestorDatos {
+	CategoriaDTO leerCategoriaXID(int id) throws Exception;
+	List<CategoriaProductoDTO> leerProductosConCategorias(int id) throws Exception;
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/servicios/IGestorDatosAltoNivel.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.servicios;
+
+import mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa.Categoria;
+
+public interface IGestorDatosAltoNivel {
+
+	Categoria leerCategoriaXID(int id);
+
+	Categoria leerCategoriaXID_conProductos(int id);
+
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/servicios/ProbadorCapaDatos.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.servicios;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+import mx.com.qtx.dipArq07m03explorCapaPer.servicios.dto.CategoriaDTO;
+import mx.com.qtx.dipArq07m03explorCapaPer.servicios.dto.CategoriaProductoDTO;
+
+//@Component
+public class ProbadorCapaDatos implements CommandLineRunner{
+	private static Logger log = LoggerFactory.getLogger(ProbadorCapaDatos.class);
+	
+	@Autowired
+	IGestorDatos gestorDatos;
+
+	@Override
+	public void run(String... args) throws Exception {
+		
+		CategoriaDTO catDto = this.gestorDatos.leerCategoriaXID(5);
+		log.info("Categoria leída: " + catDto);
+		List<CategoriaProductoDTO> lstProdCats = this.gestorDatos.leerProductosConCategorias(1);
+		lstProdCats.forEach(pcI->log.info(pcI.toString()));
+	}
+
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/servicios/ProbadorCapaDatosJPA.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.servicios;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa.Categoria;
+
+// @Component
+public class ProbadorCapaDatosJPA implements CommandLineRunner{
+	private static Logger log = LoggerFactory.getLogger(ProbadorCapaDatosJPA.class);
+	
+	@Autowired
+	IGestorDatosAltoNivel gestorDatos;
+
+	@Override
+	public void run(String... args) throws Exception {
+		Categoria cat = this.gestorDatos.leerCategoriaXID_conProductos(5);
+		log.info(cat.toString());
+	}
+
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/servicios/dto/CategoriaDTO.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.servicios.dto;
+
+public record CategoriaDTO(	int id, String nombre, String descripcion) {
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/servicios/dto/CategoriaProductoDTO.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.servicios.dto;
+
+import java.math.BigDecimal;
+
+public record CategoriaProductoDTO(int catIdCategoria, String catNombre, String catDescripcion, 
+						String prdNombre, String prdDescripcion, BigDecimal prdPrecio) {
+
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/web/CarritoController.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.web;
+
+import mx.com.qtx.dipArq07m03explorCapaPer.negocio.CarritoCompraService;
+import mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa.ProductoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+public class CarritoController {
+
+    @Autowired
+    private CarritoCompraService carritoService;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
+    @PostMapping("/carrito/agregar")
+    public String agregarAlCarrito(@RequestParam String productoId, @RequestParam int cantidad) {
+        productoRepository.findById(productoId).ifPresent(producto -> {
+            carritoService.agregarProducto(producto, cantidad);
+        });
+        return "redirect:/carrito";
+    }
+
+    @GetMapping("/carrito")
+    public String verCarrito(Model model) {
+        model.addAttribute("items", carritoService.getItems());
+        model.addAttribute("total", carritoService.getTotal());
+        return "carrito";
+    }
+}
+
+
+
+================================================
+FILE: src/main/java/mx/com/qtx/dipArq07m03explorCapaPer/web/CatalogoController.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer.web;
+
+import mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa.Categoria;
+import mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa.CategoriaRepository;
+import mx.com.qtx.dipArq07m03explorCapaPer.persistencia.jpa.ProductoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.Optional;
+
+@Controller
+public class CatalogoController {
+
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
+    @GetMapping({"/", "/categorias"})
+    public String mostrarCategorias(Model model) {
+        model.addAttribute("categorias", categoriaRepository.findAll());
+        return "categorias";
+    }
+
+    @GetMapping("/categorias/{id}")
+    public String mostrarProductosPorCategoria(@PathVariable Integer id, Model model) {
+        Optional<Categoria> categoriaOpt = categoriaRepository.findByIdWithProductos(id);
+        if (categoriaOpt.isPresent()) {
+            model.addAttribute("categoria", categoriaOpt.get());
+            model.addAttribute("productos", categoriaOpt.get().getProductos());
+            return "productos-por-categoria";
+        }
+        return "redirect:/categorias";
+    }
+
+    @GetMapping("/productos/{id}")
+    public String mostrarDetalleProducto(@PathVariable String id, Model model) {
+        productoRepository.findById(id).ifPresent(producto -> model.addAttribute("producto", producto));
+        return "detalle-producto";
+    }
+}
+
+
+
+================================================
+FILE: src/main/resources/application.properties
+================================================
+spring.application.name=dipArq07m03explorCapaPer-1
+server.port=8081
+# CONEXION BD
+spring.datasource.url=jdbc:mysql://localhost:3306/sis_ventas?useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+spring.datasource.username=root
+spring.datasource.password=T1tu$030382
+
+# Deshabilitar cache de Thymeleaf (solo para desarrollo interactivo)
+spring.thymeleaf.cache=false
+
+# logging
+logging.level.root=warn
+logging.level.mx.com.qtx=info
+logging.pattern.console=%d{HH:mm:ss.SSS} [%X{threadName}] [%X{requestId}] %-5level %logger{36} - %msg%n
+#
+# Configuraciones adicionales para JPA
+#spring.jpa.hibernate.ddl-auto=update
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+
+
+================================================
+FILE: src/main/resources/templates/carrito.html
+================================================
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3.3 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Inter', sans-serif; }
+        .navbar { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important; padding: 1rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; letter-spacing: 0.5px; }
+        .nav-link { font-weight: 500; transition: color 0.3s ease; }
+        .nav-link:hover { color: #f8f9fa !important; transform: translateY(-1px); }
+        .card { border: none; border-radius: 16px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 6px 15px rgba(0,0,0,0.05); overflow: hidden; }
+        .card-header { padding: 1.5rem; }
+        .card-header.bg-success { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%) !important; color: #1a4d2e !important; }
+        h1, h2, h3, h4 { font-weight: 700; color: #2c3e50; }
+        .btn { border-radius: 8px; font-weight: 600; transition: all 0.3s ease; }
+        .btn-primary { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border: none; }
+        .btn-primary:hover { box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4); transform: translateY(-2px); }
+        .btn-outline-primary { border-color: #2a5298; color: #2a5298; }
+        .btn-outline-primary:hover { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-color: transparent; color: white; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4); transform: translateY(-2px); }
+        .btn-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border: none; color: white; }
+        .btn-success:hover { box-shadow: 0 5px 15px rgba(56, 239, 125, 0.4); transform: translateY(-2px); }
+        .table { border-radius: 12px; overflow: hidden; }
+        .table thead th { background-color: #f8f9fa; border-bottom: 2px solid #e9ecef; font-weight: 600; color: #495057; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; padding: 15px; }
+        .table td { padding: 15px; vertical-align: middle; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Mi Tienda QTX</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/carrito">Carrito</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2 class="mb-4">
+        <i class="bi bi-cart3"></i> Tu Carrito de Compras
+    </h2>
+    
+    <div class="row" th:if="${#lists.isEmpty(items)}">
+        <div class="col-12">
+            <div class="alert alert-warning text-center">
+                Tu carrito está vacío. ¡Empieza a comprar!
+            </div>
+            <div class="text-center mt-3">
+                <a href="/categorias" class="btn btn-primary btn-lg">Ir al Catálogo</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" th:unless="${#lists.isEmpty(items)}">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="item : ${items}">
+                                    <td th:text="${item.producto.nombre}">Nombre Producto</td>
+                                    <td th:text="${'$' + item.producto.precio}">$0.00</td>
+                                    <td th:text="${item.cantidad}">1</td>
+                                    <td th:text="${'$' + item.subtotal}" class="fw-bold">$0.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="card-title mb-0">Resumen de Compra</h4>
+                </div>
+                <div class="card-body">
+                    <h3 class="d-flex justify-content-between">
+                        <span>Total:</span>
+                        <span th:text="${'$' + total}">$0.00</span>
+                    </h3>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success btn-lg" disabled>
+                            Proceder al Pago
+                        </button>
+                        <a href="/categorias" class="btn btn-outline-primary">
+                            Seguir Comprando
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+================================================
+FILE: src/main/resources/templates/categorias.html
+================================================
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Categorías</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3.3 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Inter', sans-serif; }
+        .navbar { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important; padding: 1rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; letter-spacing: 0.5px; }
+        .nav-link { font-weight: 500; transition: color 0.3s ease; }
+        .nav-link:hover { color: #f8f9fa !important; transform: translateY(-1px); }
+        .card { border: none; border-radius: 16px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-7px); box-shadow: 0 15px 25px rgba(0,0,0,0.1); }
+        .card-title { font-weight: 700; color: #2c3e50; }
+        h1, h2, h3, h4 { font-weight: 700; color: #2c3e50; }
+        .btn { border-radius: 8px; font-weight: 600; transition: all 0.3s ease; }
+        .btn-primary { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border: none; }
+        .btn-primary:hover { box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4); transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Mi Tienda QTX</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/carrito">
+                        <i class="bi bi-cart"></i> Carrito
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Categorías de Productos</h1>
+    <div class="row">
+        <div class="col-md-4 mb-4" th:each="categoria : ${categorias}">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title" th:text="${categoria.nombre}">Nombre Categoría</h5>
+                    <p class="card-text text-muted" th:text="${categoria.descripcion}">Descripción de la categoría.</p>
+                    <div class="mt-auto">
+                        <a th:href="@{/categorias/{id}(id=${categoria.id})}" class="btn btn-primary w-100">Ver Productos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"  crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+================================================
+FILE: src/main/resources/templates/detalle-producto.html
+================================================
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Producto</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3.3 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Inter', sans-serif; }
+        .navbar { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important; padding: 1rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; letter-spacing: 0.5px; }
+        .nav-link { font-weight: 500; transition: color 0.3s ease; }
+        .nav-link:hover { color: #f8f9fa !important; transform: translateY(-1px); }
+        .card { border: none; border-radius: 16px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 8px 20px rgba(0,0,0,0.08); overflow: hidden; }
+        .card-header { padding: 1.5rem; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important; }
+        .card-title { font-weight: 700; color: white; }
+        h1, h2, h3, h4 { font-weight: 700; }
+        .text-success { color: #28a745 !important; font-weight: 800; font-size: 2rem; }
+        .btn { border-radius: 8px; font-weight: 600; transition: all 0.3s ease; }
+        .btn-success { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border: none; color: #1a4d2e; }
+        .btn-success:hover { box-shadow: 0 5px 15px rgba(67, 233, 123, 0.4); transform: translateY(-2px); color: #1a4d2e; filter: brightness(1.05); }
+        .form-control { border-radius: 8px; padding: 0.75rem 1rem; border: 1px solid #ced4da; }
+        .form-control:focus { box-shadow: 0 0 0 4px rgba(42, 82, 152, 0.1); border-color: #2a5298; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Mi Tienda QTX</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/carrito">Carrito</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row" th:if="${producto != null}">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0" th:text="${producto.nombre}">Nombre Producto</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="text-success mb-3" th:text="${'$' + producto.precio}">$0.00</h4>
+                    <p class="card-text" th:text="${producto.descripcion}">Descripción detallada del producto.</p>
+                    
+                    <hr>
+                    
+                    <form th:action="@{/carrito/agregar}" method="post" class="mt-4">
+                        <input type="hidden" name="productoId" th:value="${producto.id}" />
+                        
+                        <div class="mb-3">
+                            <label for="cantidad" class="form-label">Cantidad a comprar:</label>
+                            <input type="number" class="form-control" id="cantidad" name="cantidad" value="1" min="1" max="99" required>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                Agregar al Carrito
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <a th:href="@{/categorias/{id}(id=${producto.categoria.id})}" class="btn btn-outline-secondary">Volver a la Categoría</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="alert alert-danger" th:if="${producto == null}">
+        El producto solicitado no existe.
+    </div>
+</div>
+
+<!-- Bootstrap JS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+================================================
+FILE: src/main/resources/templates/productos-por-categoria.html
+================================================
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos por Categoría</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3.3 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Inter', sans-serif; }
+        .navbar { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important; padding: 1rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; letter-spacing: 0.5px; }
+        .nav-link { font-weight: 500; transition: color 0.3s ease; }
+        .nav-link:hover { color: #f8f9fa !important; transform: translateY(-1px); }
+        .card { border: none; border-radius: 16px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-7px); box-shadow: 0 15px 25px rgba(0,0,0,0.1); }
+        .card-title { font-weight: 700; color: #2c3e50; }
+        h1, h2, h3, h4 { font-weight: 700; color: #2c3e50; }
+        .btn { border-radius: 8px; font-weight: 600; transition: all 0.3s ease; }
+        .btn-outline-primary { border-color: #2a5298; color: #2a5298; }
+        .btn-outline-primary:hover { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-color: transparent; color: white; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4); transform: translateY(-2px); }
+        .breadcrumb { background-color: white; padding: 15px 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Mi Tienda QTX</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/carrito">Carrito</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/categorias">Categorías</a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="${categoria.nombre}">Categoría Actual</li>
+        </ol>
+    </nav>
+
+    <h2 class="mb-4">Productos en <span th:text="${categoria.nombre}"></span></h2>
+
+    <div class="row">
+        <div class="col-md-4 mb-4" th:each="producto : ${productos}">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title" th:text="${producto.nombre}">Nombre Producto</h5>
+                    <p class="card-text text-muted" th:text="${producto.descripcion}">Descripción corta.</p>
+                    <h6 class="card-subtitle mb-2 text-primary" th:text="${'$' + producto.precio}">$0.00</h6>
+                    <div class="mt-auto">
+                        <a th:href="@{/productos/{id}(id=${producto.id})}" class="btn btn-outline-primary w-100">Ver Detalle</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div th:if="${#lists.isEmpty(productos)}" class="col-12">
+            <div class="alert alert-info" role="alert">
+                No hay productos en esta categoría por el momento.
+            </div>
+        </div>
+    </div>
+
+    <a href="/categorias" class="btn btn-secondary mt-3">Volver al Catálogo</a>
+</div>
+
+<!-- Bootstrap JS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+================================================
+FILE: src/test/java/mx/com/qtx/dipArq07m03explorCapaPer/DipArq07m03explorCapaPer1ApplicationTests.java
+================================================
+package mx.com.qtx.dipArq07m03explorCapaPer;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class DipArq07m03explorCapaPer1ApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
+
+
+
+================================================
+FILE: .mvn/wrapper/maven-wrapper.properties
+================================================
+wrapperVersion=3.3.4
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.12/apache-maven-3.9.12-bin.zip
+
+

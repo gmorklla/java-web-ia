@@ -1,0 +1,57 @@
+¿Qué se ha logrado?
+Reorganización Estructural: Se crearon tres paquetes principales para aislar las responsabilidades:
+
+core (mx.com.qtx.core.*): Contiene la Lógica de Negocio y Entidades.
+api (mx.com.qtx.api.*): Contiene los Controladores Web y DTOs (Transferencia).
+infrastructure (mx.com.qtx.infrastructure.*): Abarca Persistencia (Spring Data/DAOs), Configuración y Monitoreo.
+Aislamiento de la Capa Core (Regla de Oro):
+
+Toda dependencia desde mx.com.qtx.core hacia api o infrastructure ha sido eliminada.
+Las Entidades JPA son ahora puras y residen exclusivamente en mx.com.qtx.core.model.
+Inversión de Dependencias y DTOs:
+
+
+CatalogoController
+ ya no retorna entidades de base de datos directamente hacia las vistas HTML. Utiliza 
+
+CatalogoService
+ para adquirir instancias de 
+
+CategoriaDTO
+ y 
+
+ProductoDTO
+.
+Modifiqué y agregué nuevos DTOs (
+
+ProductoDTO
+ y 
+
+CategoriaDTO
+) mapeados desde las entidades, protegiendo así el diseño interno de la base de datos de los clientes que consumen la API o vista.
+Persistencia JPA:
+
+
+CategoriaRepository
+, 
+
+ProductoRepository
+ y DAOs se movieron a infrastructure.persistence.
+Nos aseguramos de mantener las anotaciones @Query (e.g. JOIN FETCH c.productos) para prevenir la temida excepción LazyInitializationException al aislar los repositorios.
+Entorno de Pruebas Limpio:
+
+Moví las clases 
+
+ProbadorCapaDatos
+ y 
+
+ProbadorCapaDatosJPA
+ a la ruta src/test/java/mx/com/qtx/test/servicios/.
+Comenté las anotaciones @Component de dichos probadores para que no intercepten la inicialización normal del servidor web.
+Validación y Pruebas
+Se validó que el proyecto compila íntegramente de manera correcta tras mover más de 30 archivos (mvn clean compile test-compile).
+Se comprobaron los imports cruzados garantizando que la regla de la Arquitectura Limpia permanece irrompible.
+Se verificó el arranque de los contextos de Spring Boot.
+TIP
+
+Dado que la clase Main (DipArq07m03explorCapaPer1Application) ahora reside en la raíz de mx.com.qtx, automáticamente detectará dinámicamente todos los componentes de la Clean Architecture de forma nativa sin necesitar configuraciones adicionales de @ComponentScan.

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoreo de Componentes Web</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3.3 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Inter', sans-serif; }
+        .navbar { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important; padding: 1rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; letter-spacing: 0.5px; }
+        .nav-link { font-weight: 500; transition: color 0.3s ease; }
+        .nav-link:hover { color: #f8f9fa !important; transform: translateY(-1px); }
+        .card { border: none; border-radius: 16px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card-title { font-weight: 700; color: #2c3e50; }
+        h1, h2, h3, h4 { font-weight: 700; color: #2c3e50; }
+        .btn { border-radius: 8px; font-weight: 600; transition: all 0.3s ease; }
+        .table-custom { background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .table-custom th { background-color: #f8f9fa; font-weight: 600; color: #2c3e50; border-bottom: 2px solid #e9ecef; }
+        .table-custom td { vertical-align: middle; }
+        .badge-order { font-size: 0.85em; padding: 0.4em 0.8em; background-color: #e3f2fd; color: #0d47a1; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand" href="/">Mi Tienda QTX - Panel de Monitoreo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/monitoreo/logs">
+                        <i class="bi bi-card-list"></i> Peticiones
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/monitoreo/componentes">
+                        <i class="bi bi-puzzle"></i> Componentes Web
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        <i class="bi bi-house-door"></i> Volver a la Tienda
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid px-4 mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-puzzle text-primary me-2"></i> Componentes Web en Ejecución</h2>
+        
+        <button onclick="location.reload();" class="btn btn-outline-primary me-2">
+            <i class="bi bi-arrow-clockwise"></i> Actualizar
+        </button>
+    </div>
+    
+    <div class="row">
+        <!-- Filtros -->
+        <div class="col-12 mb-4">
+            <div class="card p-4 h-100">
+                <h4 class="mb-3"><i class="bi bi-funnel"></i> Filtros (Filters)</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Orden</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Clase</th>
+                                <th scope="col">Mapeos (URL)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="filtro : ${filtros}">
+                                <td>
+                                    <span class="badge badge-order rounded-pill" th:text="${filtro.order}">1</span>
+                                </td>
+                                <td><strong th:text="${filtro.name}">Nombre</strong></td>
+                                <td class="text-muted small"><code th:text="${filtro.className}">Clase</code></td>
+                                <td><code th:text="${filtro.mappings}">/*</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Servlets -->
+        <div class="col-12 mb-4">
+            <div class="card p-4 h-100">
+                <h4 class="mb-3"><i class="bi bi-server"></i> Servlets</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Clase</th>
+                                <th scope="col">Mapeos (URL)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="servlet : ${servlets}">
+                                <td><strong th:text="${servlet.name}">Nombre</strong></td>
+                                <td class="text-muted small"><code th:text="${servlet.className}">Clase</code></td>
+                                <td><code th:text="${servlet.mappings}">/</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

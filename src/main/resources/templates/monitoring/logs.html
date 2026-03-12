@@ -42,8 +42,21 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid px-4">
         <a class="navbar-brand" href="/">Mi Tienda QTX - Panel de Monitoreo</a>
-        <div class="collapse navbar-collapse">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/monitoreo/logs">
+                        <i class="bi bi-card-list"></i> Peticiones
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/monitoreo/componentes">
+                        <i class="bi bi-puzzle"></i> Componentes Web
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/">
                         <i class="bi bi-house-door"></i> Volver a la Tienda

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoreo de Componentes Web</title>
+    <title>Monitoreo de Rendimiento (AOP)</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap 5.3.3 CDN -->
@@ -23,7 +23,13 @@
         .table-custom { background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .table-custom th { background-color: #f8f9fa; font-weight: 600; color: #2c3e50; border-bottom: 2px solid #e9ecef; }
         .table-custom td { vertical-align: middle; }
-        .badge-order { font-size: 0.85em; padding: 0.4em 0.8em; background-color: #e3f2fd; color: #0d47a1; }
+        
+        .time-good { color: #155724; font-weight: 600; }
+        .time-warning { color: #856404; font-weight: 700; }
+        .time-danger { color: #721c24; font-weight: 700; background-color: #f8d7da; padding: 2px 6px; border-radius: 4px; }
+        
+        .class-name { font-size: 0.85em; color: #6c757d; }
+        .method-name { font-weight: 600; color: #0d6efd; }
     </style>
 </head>
 <body>
@@ -42,7 +48,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/monitoreo/componentes">
+                    <a class="nav-link" href="/monitoreo/componentes">
                         <i class="bi bi-puzzle"></i> Componentes Web
                     </a>
                 </li>
@@ -52,7 +58,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/monitoreo/rendimiento">
+                    <a class="nav-link active" href="/monitoreo/rendimiento">
                         <i class="bi bi-speedometer2"></i> Rendimiento (AOP)
                     </a>
                 </li>
@@ -68,66 +74,57 @@
 
 <div class="container-fluid px-4 mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="bi bi-puzzle text-primary me-2"></i> Componentes Web en Ejecución</h2>
+        <h2><i class="bi bi-speedometer2 text-primary me-2"></i> Perfilado de Métodos (Beans Propios)</h2>
         
-        <button onclick="location.reload();" class="btn btn-outline-primary me-2">
-            <i class="bi bi-arrow-clockwise"></i> Actualizar
-        </button>
+        <div>
+            <button onclick="location.reload();" class="btn btn-outline-primary me-2">
+                <i class="bi bi-arrow-clockwise"></i> Actualizar
+            </button>
+            <form action="/monitoreo/rendimiento/limpiar" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('¿Seguro que deseas limpiar las métricas de rendimiento?');">
+                    <i class="bi bi-trash"></i> Reiniciar
+                </button>
+            </form>
+        </div>
     </div>
     
-    <div class="row">
-        <!-- Filtros -->
-        <div class="col-12 mb-4">
-            <div class="card p-4 h-100">
-                <h4 class="mb-3"><i class="bi bi-funnel"></i> Filtros (Filters)</h4>
-                <div class="table-responsive">
-                    <table class="table table-hover table-custom mb-0">
-                        <thead>
-                            <tr>
-                                <th scope="col">Orden</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Clase</th>
-                                <th scope="col">Mapeos (URL)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="filtro : ${filtros}">
-                                <td>
-                                    <span class="badge badge-order rounded-pill" th:text="${filtro.order}">1</span>
-                                </td>
-                                <td><strong th:text="${filtro.name}">Nombre</strong></td>
-                                <td class="text-muted small"><code th:text="${filtro.className}">Clase</code></td>
-                                <td><code th:text="${filtro.mappings}">/*</code></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="card p-4">
+        <div th:if="${metricas == null or metricas.empty}" class="alert alert-info py-3 mb-0 text-center">
+            <i class="bi bi-info-circle me-1"></i> No hay métricas registradas aún. 
+            Navega por la aplicación para que se intercepten llamadas a tus Beans.
         </div>
 
-        <!-- Servlets -->
-        <div class="col-12 mb-4">
-            <div class="card p-4 h-100">
-                <h4 class="mb-3"><i class="bi bi-server"></i> Servlets</h4>
-                <div class="table-responsive">
-                    <table class="table table-hover table-custom mb-0">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Clase</th>
-                                <th scope="col">Mapeos (URL)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="servlet : ${servlets}">
-                                <td><strong th:text="${servlet.name}">Nombre</strong></td>
-                                <td class="text-muted small"><code th:text="${servlet.className}">Clase</code></td>
-                                <td><code th:text="${servlet.mappings}">/</code></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div th:if="${metricas != null and !metricas.empty}" class="table-responsive">
+            <table class="table table-hover table-custom mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Clase</th>
+                        <th scope="col">Método</th>
+                        <th scope="col" class="text-end">Llamadas (#)</th>
+                        <th scope="col" class="text-end">Tiempo Total (ms)</th>
+                        <th scope="col" class="text-end">Tiempo Promedio (ms)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="metrica : ${metricas}">
+                        <td class="class-name text-truncate" style="max-width: 250px;" th:title="${metrica.className}" th:text="${metrica.className}">
+                            mx.com.qtx.api.controller...
+                        </td>
+                        <td class="method-name" th:text="${metrica.methodName} + '()'">
+                            listarArticulos()
+                        </td>
+                        <td class="text-end"><span class="badge bg-secondary rounded-pill" th:text="${metrica.executionCount}">10</span></td>
+                        <td class="text-end text-muted" th:text="${metrica.totalTimeInMs}">150</td>
+                        
+                        <td class="text-end">
+                            <span th:class="${metrica.averageTime > 500 ? 'time-danger' : (metrica.averageTime > 200 ? 'time-warning' : 'time-good')}" 
+                                  th:text="${#numbers.formatDecimal(metrica.averageTime, 1, 2)} + ' ms'">
+                                15.00 ms
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

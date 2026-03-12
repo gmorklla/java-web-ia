@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoreo de Componentes Web</title>
+    <title>Monitoreo de Beans (Spring Context)</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap 5.3.3 CDN -->
@@ -23,7 +23,8 @@
         .table-custom { background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .table-custom th { background-color: #f8f9fa; font-weight: 600; color: #2c3e50; border-bottom: 2px solid #e9ecef; }
         .table-custom td { vertical-align: middle; }
-        .badge-order { font-size: 0.85em; padding: 0.4em 0.8em; background-color: #e3f2fd; color: #0d47a1; }
+        .badge-scope { font-size: 0.8em; padding: 0.4em 0.8em; background-color: #e8f5e9; color: #1b5e20; }
+        .badge-total { font-size: 1rem; padding: 0.5em 1em; }
     </style>
 </head>
 <body>
@@ -42,12 +43,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/monitoreo/componentes">
+                    <a class="nav-link" href="/monitoreo/componentes">
                         <i class="bi bi-puzzle"></i> Componentes Web
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/monitoreo/beans">
+                    <a class="nav-link active" href="/monitoreo/beans">
                         <i class="bi bi-box-seam"></i> Spring Beans
                     </a>
                 </li>
@@ -68,36 +69,45 @@
 
 <div class="container-fluid px-4 mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="bi bi-puzzle text-primary me-2"></i> Componentes Web en Ejecución</h2>
+        <h2><i class="bi bi-box-seam text-primary me-2"></i> Spring Context Beans</h2>
         
-        <button onclick="location.reload();" class="btn btn-outline-primary me-2">
-            <i class="bi bi-arrow-clockwise"></i> Actualizar
-        </button>
+        <div>
+            <span class="badge bg-primary badge-total me-3">
+                Total Beans: <span th:text="${totalBeans}">0</span>
+            </span>
+            <button onclick="location.reload();" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-clockwise"></i> Actualizar
+            </button>
+        </div>
     </div>
     
     <div class="row">
-        <!-- Filtros -->
+        <!-- Beans Propios -->
         <div class="col-12 mb-4">
-            <div class="card p-4 h-100">
-                <h4 class="mb-3"><i class="bi bi-funnel"></i> Filtros (Filters)</h4>
+            <div class="card p-4">
+                <h4 class="mb-3 text-success">
+                    <i class="bi bi-person-badge"></i> Beans Propios (mx.com.qtx)
+                    <span class="badge bg-success ms-2 rounded-pill" style="font-size: 0.6em; vertical-align: middle;" th:text="${beansPropios.size()}">0</span>
+                </h4>
                 <div class="table-responsive">
                     <table class="table table-hover table-custom mb-0">
                         <thead>
                             <tr>
-                                <th scope="col">Orden</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Clase</th>
-                                <th scope="col">Mapeos (URL)</th>
+                                <th scope="col" style="width: 25%;">Nombre del Bean</th>
+                                <th scope="col" style="width: 60%;">Clase Implementación</th>
+                                <th scope="col" style="width: 15%;">Scope</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="filtro : ${filtros}">
+                            <tr th:each="bean : ${beansPropios}">
+                                <td><strong th:text="${bean.name}">nombreBean</strong></td>
+                                <td class="text-muted small"><code th:text="${bean.className}">mx.com.qtx...</code></td>
                                 <td>
-                                    <span class="badge badge-order rounded-pill" th:text="${filtro.order}">1</span>
+                                    <span class="badge badge-scope rounded-pill" th:text="${bean.scope}">singleton</span>
                                 </td>
-                                <td><strong th:text="${filtro.name}">Nombre</strong></td>
-                                <td class="text-muted small"><code th:text="${filtro.className}">Clase</code></td>
-                                <td><code th:text="${filtro.mappings}">/*</code></td>
+                            </tr>
+                            <tr th:if="${beansPropios.empty}">
+                                <td colspan="3" class="text-center text-muted py-3">No se encontraron beans en el paquete propio.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -105,24 +115,33 @@
             </div>
         </div>
 
-        <!-- Servlets -->
+        <!-- Beans de Infraestructura -->
         <div class="col-12 mb-4">
-            <div class="card p-4 h-100">
-                <h4 class="mb-3"><i class="bi bi-server"></i> Servlets</h4>
-                <div class="table-responsive">
+            <div class="card p-4">
+                <h4 class="mb-3 text-secondary">
+                    <i class="bi bi-gear"></i> Beans de Infraestructura (Spring Boot / Framework)
+                    <span class="badge bg-secondary ms-2 rounded-pill" style="font-size: 0.6em; vertical-align: middle;" th:text="${beansInfraestructura.size()}">0</span>
+                </h4>
+                <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
                     <table class="table table-hover table-custom mb-0">
-                        <thead>
+                        <thead style="position: sticky; top: 0; z-index: 1;">
                             <tr>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Clase</th>
-                                <th scope="col">Mapeos (URL)</th>
+                                <th scope="col" style="width: 30%;">Nombre del Bean</th>
+                                <th scope="col" style="width: 55%;">Clase Implementación</th>
+                                <th scope="col" style="width: 15%;">Scope</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="servlet : ${servlets}">
-                                <td><strong th:text="${servlet.name}">Nombre</strong></td>
-                                <td class="text-muted small"><code th:text="${servlet.className}">Clase</code></td>
-                                <td><code th:text="${servlet.mappings}">/</code></td>
+                            <tr th:each="bean : ${beansInfraestructura}">
+                                <td class="text-truncate" style="max-width: 250px;" th:title="${bean.name}">
+                                    <span th:text="${bean.name}">nombreBean</span>
+                                </td>
+                                <td class="text-muted small text-truncate" style="max-width: 400px;" th:title="${bean.className}">
+                                    <code th:text="${bean.className}">org.springframework...</code>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border rounded-pill" th:text="${bean.scope}">singleton</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

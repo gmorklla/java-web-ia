@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoreo de Peticiones Web</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3.3 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Inter', sans-serif; }
+        .navbar { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important; padding: 1rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; letter-spacing: 0.5px; }
+        .nav-link { font-weight: 500; transition: color 0.3s ease; }
+        .nav-link:hover { color: #f8f9fa !important; transform: translateY(-1px); }
+        .card { border: none; border-radius: 16px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card-title { font-weight: 700; color: #2c3e50; }
+        h1, h2, h3, h4 { font-weight: 700; color: #2c3e50; }
+        .btn { border-radius: 8px; font-weight: 600; transition: all 0.3s ease; }
+        .btn-danger { transition: all 0.3s ease; }
+        .table-custom { background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .table-custom th { background-color: #f8f9fa; font-weight: 600; color: #2c3e50; border-bottom: 2px solid #e9ecef; }
+        .table-custom td { vertical-align: middle; }
+        .badge-method { font-size: 0.85em; padding: 0.4em 0.8em; }
+        
+        .method-GET { background-color: #e3f2fd; color: #0d47a1; }
+        .method-POST { background-color: #e8f5e9; color: #1b5e20; }
+        .method-PUT { background-color: #fff3e0; color: #e65100; }
+        .method-DELETE { background-color: #ffebee; color: #b71c1c; }
+        
+        .status-200, .status-201, .status-204 { background-color: #d4edda; color: #155724; }
+        .status-301, .status-302, .status-304 { background-color: #d1ecf1; color: #0c5460; }
+        .status-400, .status-401, .status-403, .status-404 { background-color: #fff3cd; color: #856404; }
+        .status-500, .status-502, .status-503 { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand" href="/">Mi Tienda QTX - Panel de Monitoreo</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        <i class="bi bi-house-door"></i> Volver a la Tienda
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid px-4 mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-activity text-primary me-2"></i> Registro de Peticiones Web</h2>
+        
+        <div>
+            <button onclick="location.reload();" class="btn btn-outline-primary me-2">
+                <i class="bi bi-arrow-clockwise"></i> Actualizar
+            </button>
+            <form action="/monitoreo/logs/limpiar" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('¿Seguro que deseas limpiar los logs?');">
+                    <i class="bi bi-trash"></i> Limpiar
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card p-4">
+        <div th:if="${registros == null or registros.empty}" class="alert alert-info py-3 mb-0 text-center">
+            <i class="bi bi-info-circle me-1"></i> No hay peticiones registradas aún o se ha limpiado el log. 
+            Navega por la página para generar nuevos registros.
+        </div>
+
+        <div th:if="${registros != null and !registros.empty}" class="table-responsive">
+            <table class="table table-hover table-custom mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Hora</th>
+                        <th scope="col">ID Petición</th>
+                        <th scope="col">Método</th>
+                        <th scope="col">URI</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Duración (ms)</th>
+                        <th scope="col">Hilo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="log : ${registros}">
+                        <td th:text="${#temporals.format(log.timestamp, 'HH:mm:ss.SSS')}">Hora</td>
+                        <td><code th:text="${log.requestId}">ID</code></td>
+                        <td>
+                            <span class="badge badge-method rounded-pill" 
+                                  th:classappend="'method-' + ${log.method}"
+                                  th:text="${log.method}">METODO</span>
+                        </td>
+                        <td class="text-truncate" style="max-width: 300px;" th:title="${log.uri}" th:text="${log.uri}">/ruta</td>
+                        <td>
+                            <span class="badge rounded-pill"
+                                  th:classappend="'status-' + ${log.status}"
+                                  th:text="${log.status}">200</span>
+                        </td>
+                        <td>
+                            <span th:class="${log.durationMs > 500 ? 'text-danger fw-bold' : (log.durationMs > 100 ? 'text-warning fw-bold' : 'text-success')}" 
+                                  th:text="${log.durationMs} + ' ms'">
+                                10 ms
+                            </span>
+                        </td>
+                        <td class="text-muted small" th:text="${log.threadName}">http-nio-8080-exec-1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

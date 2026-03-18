@@ -8,12 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
 @CrossOrigin(origins = "*") // Permite pruebas desde clientes externos/navegadores
+@Tag(name = "Productos", description = "API para la gestión de productos")
 public class ProductoRestController {
 
     private static final Logger log = LoggerFactory.getLogger(ProductoRestController.class);
@@ -25,12 +30,16 @@ public class ProductoRestController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar todos los productos", description = "Recupera una lista de todos los productos disponibles en el catálogo.")
     public List<ProductoDTO> listarTodos() {
         log.info("REST: Listando todos los productos");
         return productoService.listarTodos();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener producto por ID", description = "Recupera los detalles de un producto específico dado su ID.")
+    @ApiResponse(responseCode = "200", description = "Producto encontrado")
+    @ApiResponse(responseCode = "404", description = "Producto no encontrado")
     public ResponseEntity<ProductoDTO> obtenerPorId(@PathVariable String id) {
         log.info("REST: Consultando producto con id: {}", id);
         return productoService.obtenerPorId(id)
@@ -39,6 +48,9 @@ public class ProductoRestController {
     }
 
     @PostMapping
+    @Operation(summary = "Crear un nuevo producto", description = "Registra un nuevo producto en el sistema.")
+    @ApiResponse(responseCode = "201", description = "Producto creado exitosamente")
+    @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
     public ResponseEntity<ProductoDTO> crear(@RequestBody ProductoDTO dto) {
         log.info("REST: Creando nuevo producto: {}", dto.getId());
         try {

@@ -1,0 +1,52 @@
+### Prompt para el Agente de IA (Estructura Clean Architecture)
+
+**Contexto del Proyecto:**
+Actualmente el proyecto sigue una **Arquitectura Limpia**. Debes respetar estrictamente la siguiente estructura de paquetes:
+- `mx.com.qtx.core.model`: Entidades JPA (como `Producto`).
+- `mx.com.qtx.core.service`: Lógica de negocio y casos de uso.
+- `mx.com.qtx.api.controller`: Controladores de Spring MVC.
+- `mx.com.qtx.api.dto`: Objetos de transferencia de datos (DTOs).
+- `mx.com.qtx.infrastructure.persistence`: Repositorios de Spring Data JPA.
+
+**Tarea:**
+Implementar un CRUD completo para **"Artículos"** (basado en la entidad `Producto` y la tabla `prd_producto`).
+
+**Requisitos Técnicos:**
+
+1.  **Modelo (Core):**
+    *   Usa la entidad `Producto` ya existente en `core.model`.
+    *   Asegúrate de que el ID (`prd_id_producto`) sea tratado como un `String` manual (no autoincremental), permitiendo códigos como "AAPL-MW".
+
+2.  **Servicio (Core):**
+    *   Crea la clase `ProductoService` en `mx.com.qtx.core.service`.
+    *   Debe contener métodos para: `listarTodos()`, `obtenerPorId()`, `guardar()`, `actualizar()` y `eliminar()`.
+    *   El servicio debe realizar el mapeo entre la Entidad `Producto` y el `ProductoDTO` para proteger la capa de API.
+
+3.  **DTO (API):**
+    *   Actualiza o utiliza `ProductoDTO` en `mx.com.qtx.api.dto`.
+    *   **Importante:** Añade un campo `idCategoria` (Integer) al DTO para facilitar la selección de categoría en los formularios.
+
+4.  **Controlador (API):**
+    *   Crea `AdminProductoController` en `mx.com.qtx.api.controller`.
+    *   Implementa los endpoints para la gestión administrativa:
+        *   `GET /admin/productos` (Lista).
+        *   `GET /admin/productos/nuevo` (Formulario de creación).
+        *   `GET /admin/productos/editar/{id}` (Formulario de edición).
+        *   `POST /admin/productos/guardar` (Guardado/Update).
+        *   `POST /admin/productos/eliminar/{id}` (Borrado).
+    *   Inyecta `CategoriaRepository` para llenar el combo/select de categorías en las vistas de creación/edición.
+
+5.  **Vistas (Thymeleaf):**
+    *   Crea las plantillas en `src/main/resources/templates/admin/`: `lista.html` y `formulario.html`.
+    *   **Estilo Visual:** Reutiliza el diseño de `carrito.html` y `categorias.html`. Usa la fuente 'Inter', los degradados en el navbar (`#1e3c72` a `#2a5298`) y los estilos de tarjetas de Bootstrap 5.3.3.
+    *   En el formulario, valida que el ID sea obligatorio.
+
+6.  **Navegación:**
+    *   Modifica el navbar en los archivos HTML existentes para incluir un enlace a "Gestión de Productos" (`/admin/productos`).
+
+**Restricciones de Arquitectura:**
+- **Regla de Oro:** El código en `core` NO debe importar nada de `api` ni de `infrastructure`.
+- El controlador NO debe manejar entidades `Producto` directamente; debe comunicarse mediante `ProductoDTO`.
+- Asegúrate de que las operaciones de guardado se registren en los logs para que el `ConcurrencyTrackingFilter` y el `PerformanceAspect` puedan monitorear el rendimiento.
+
+---

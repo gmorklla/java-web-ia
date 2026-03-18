@@ -6,7 +6,7 @@ Este documento describe los pasos necesarios para configurar y ejecutar el proye
 
 Asegúrate de tener instalados los siguientes componentes:
 
-- **Java JDK 21** o superior.
+- **Java JDK 17** o superior (Recomendado JDK 17 o 21).
 - **MySQL Server** (u otro cliente compatible con MySQL).
 - **Maven** (opcional, el proyecto incluye un wrapper `mvnw`).
 
@@ -46,25 +46,32 @@ La aplicación se iniciará en el puerto **8081** por defecto.
 
 ## Endpoints Principales
 
-Una vez que la aplicación esté en funcionamiento, puedes acceder a las siguientes rutas:
-
+### Vistas Web (Thymeleaf)
 - **Catálogo de Categorías**: [http://localhost:8081/categorias](http://localhost:8081/categorias)
 - **Carrito de Compras**: [http://localhost:8081/carrito](http://localhost:8081/carrito)
+- **Administración de Productos**: [http://localhost:8081/admin/productos](http://localhost:8081/admin/productos)
+
+### APIs REST
+- **API de Productos**: [http://localhost:8081/api/productos](http://localhost:8081/api/productos)
+
+## Documentación de API (OpenAPI / Swagger)
+
+El proyecto cuenta con documentación interactiva de la API accesible una vez que el servidor está en funcionamiento:
+
+- **Swagger UI**: [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
+- **Definición OpenAPI (JSON)**: [http://localhost:8081/v3/api-docs](http://localhost:8081/v3/api-docs)
 
 ## Errores Comunes
 
 ### Error de Versión de Java (UnsupportedClassVersionError)
 Si recibes un error indicando que la clase fue compilada por una versión más reciente de Java (ej. `class file version 65.0`) y tu entorno solo reconoce versiones anteriores (ej. `up to 61.0`):
 
-1. **Causa**: El proyecto requiere **Java 21**, pero estás usando **Java 17**.
-2. **Solución Recomendada**: Instala el JDK 21 y asegúrate de que tu variable `JAVA_HOME` apunte a la nueva instalación.
-3. **Solución Alternativa (Downgrade)**: Si no puedes instalar Java 21, puedes bajar la versión en el archivo `pom.xml`:
-   - Cambia `<java.version>21</java.version>` por `<java.version>17</java.version>`.
-   - **IMPORTANTE**: Después de cambiar la versión, debes limpiar los archivos compilados anteriormente ejecutando:
-     ```powershell
-     ./mvnw.cmd clean spring-boot:run
-     ```
-   - *Nota: Esto solo funcionará si el proyecto no utiliza características específicas de Java 21.*
+1. **Causa**: El proyecto está configurado para **Java 17** en el `pom.xml`, pero el entorno de ejecución es inferior.
+2. **Solución**: Instala el JDK 17 o 21 y asegúrate de que tu variable `JAVA_HOME` apunte a la instalación correcta.
+3. **Limpieza**: Después de cambiar la versión, se recomienda limpiar los archivos compilados:
+   ```powershell
+   ./mvnw.cmd clean spring-boot:run
+   ```
 
 ## Monitoreo y Logs
 

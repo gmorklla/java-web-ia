@@ -36,7 +36,7 @@ public class CatalogoService {
         List<ProductoDTO> productosDto = null;
         if (categoria.getProductos() != null) {
             productosDto = categoria.getProductos().stream()
-                    .map(p -> new ProductoDTO(p.getId(), p.getNombre(), p.getDescripcion(), p.getPrecio()))
+                    .map(p -> new ProductoDTO(p.getId(), p.getNombre(), p.getDescripcion(), p.getPrecio(), p.getCategoria().getId()))
                     .collect(Collectors.toList());
         }
         return new CategoriaDTO(categoria.getId(), categoria.getNombre(), categoria.getDescripcion(), productosDto);

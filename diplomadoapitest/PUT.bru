@@ -1,0 +1,22 @@
+meta {
+  name: PUT
+  type: http
+  seq: 1
+}
+
+put {
+  url: http://localhost:8081/api/productos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": "MACA-MINI-01",
+    "nombre": "Mac Mini M2 - Versión Pro",
+    "descripcion": "Actualizado: Ahora con 16GB de RAM",
+    "precio": 15499.00,
+    "idCategoria": 1
+  }
+  
+}

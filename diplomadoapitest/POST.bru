@@ -1,0 +1,22 @@
+meta {
+  name: POST /api/productos
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8081/api/productos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": "MACA-MINI-01",
+    "nombre": "Mac Mini M2",
+    "descripcion": "Computadora de escritorio compacta y potente",
+    "precio": 12999.00,
+    "idCategoria": 1
+  }
+  
+}
